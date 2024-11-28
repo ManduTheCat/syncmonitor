@@ -1,6 +1,6 @@
 package syncMonitor;
 
-import syncMonitor.session.SyncMonitorSession;
+import syncMonitor.session.SyncMonitorSessionTibero;
 import syncMonitor.view.View;
 
 public class Main {
@@ -16,7 +16,7 @@ public class Main {
         String tiberoDB_SID = "tibero7_2";
 
 
-        SyncMonitorSession session = SyncMonitorSession.getSyncMonitorSession(
+        SyncMonitorSessionTibero session = SyncMonitorSessionTibero.getSyncMonitorSession(
                 tiberoIp, tiberoPort, tiberoId, tiberoPwd, tiberoDB_SID
         );
         View print = new View(session, tiberoDB_LINK, tiberoUser1, tiberoUser2);

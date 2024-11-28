@@ -2,7 +2,7 @@ package syncMonitor.session;
 
 import java.sql.*;
 
-public class SyncMonitorSession  {
+public class SyncMonitorSessionTibero {
 
     private static Connection conn = null;
     private PreparedStatement pstmt = null;
@@ -15,12 +15,12 @@ public class SyncMonitorSession  {
     /*
     세션 변경 방지 및 단일세션 보장을 위한 싱글톤 패턴
     * */
-    private static SyncMonitorSession syncMonitorSession = null;
-    private SyncMonitorSession(){
+    private static SyncMonitorSessionTibero syncMonitorSessionTibero = null;
+    private SyncMonitorSessionTibero(){
     }
-    public static SyncMonitorSession getSyncMonitorSession(String ip, String port, String id, String pwd, String DB_SID){
-        if(syncMonitorSession != null) return syncMonitorSession;
-        syncMonitorSession = new SyncMonitorSession();
+    public static SyncMonitorSessionTibero getSyncMonitorSession(String ip, String port, String id, String pwd, String DB_SID){
+        if(syncMonitorSessionTibero != null) return syncMonitorSessionTibero;
+        syncMonitorSessionTibero = new SyncMonitorSessionTibero();
         String DB_URL = "jdbc:tibero:thin:@" + ip + ":" + port + ":" + DB_SID;
         try {
             Class.forName(DB_DRV);
@@ -31,7 +31,7 @@ public class SyncMonitorSession  {
             System.out.println("fail");
             ex.printStackTrace();
         }
-        return syncMonitorSession;
+        return syncMonitorSessionTibero;
     }
 
     public void disconnect() {
