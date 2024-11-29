@@ -1,7 +1,9 @@
 package syncMonitor;
 
+import syncMonitor.session.SyncMonitorSession;
 import syncMonitor.session.SyncMonitorSessionOracle;
 import syncMonitor.session.SyncMonitorSessionTibero;
+import syncMonitor.view.ViewOracle;
 import syncMonitor.view.ViewTibero;
 
 public class Main {
@@ -18,6 +20,7 @@ public class Main {
 
 
 
+        // 만드는중
         String oracleIp = "192.168.1.213";
         String oraclePort = "1521";
         String oracleId = "JSH_OTT";
@@ -29,22 +32,26 @@ public class Main {
 
 
         // connection
-        SyncMonitorSessionTibero session = SyncMonitorSessionTibero.getSyncMonitorSession(
+        SyncMonitorSession sessionTibero = SyncMonitorSessionTibero.getSyncMonitorSession(
                 tiberoIp, tiberoPort, tiberoId, tiberoPwd, tiberoDB_SID
         );
-        SyncMonitorSessionOracle sessionOracle = SyncMonitorSessionOracle.getSyncMonitorSession(
-                oracleIp, oraclePort, oracleId, oraclePwd, oracleDB_SID
 
-        );
+//        SyncMonitorSession sessionOracle = SyncMonitorSessionOracle.getSyncMonitorSession(
+//                oracleIp, oraclePort, oracleId, oraclePwd, oracleDB_SID
+//
+//        );
 
-        // print info
-        ViewTibero viewTibero = new ViewTibero(session, tiberoDB_LINK, tiberoUser1, tiberoUser2);
+//        System.out.println(sessionOracle.getConn().toString());
+
+        ViewTibero viewTibero = new ViewTibero(sessionTibero, tiberoDB_LINK, tiberoUser1, tiberoUser2);
         viewTibero.doPrint();
+//        ViewOracle viewOracle = new ViewOracle(sessionOracle, oracleDB_LINK, oracleUser1, oracleUser2);
+//        viewOracle.doPrint();
 
 
 
         //end
-        session.disconnect();
+        sessionTibero.disconnect();
 
     }
 

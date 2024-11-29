@@ -2,7 +2,7 @@ package syncMonitor.session;
 
 import java.sql.*;
 
-public class SyncMonitorSessionTibero {
+public class SyncMonitorSessionTibero extends SyncMonitorSession{
 
     private static Connection conn = null;
     private PreparedStatement pstmt = null;
@@ -10,7 +10,6 @@ public class SyncMonitorSessionTibero {
     // 나중에 클래스 역활 분리되면 넘겨줘야하다
 
 
-    private static String DB_DRV = "com.tmax.tibero.jdbc.TbDriver";
 
     /*
     세션 변경 방지 및 단일세션 보장을 위한 싱글톤 패턴
@@ -18,10 +17,15 @@ public class SyncMonitorSessionTibero {
     private static SyncMonitorSessionTibero syncMonitorSessionTibero = null;
     private SyncMonitorSessionTibero(){
     }
+
     public static SyncMonitorSessionTibero getSyncMonitorSession(String ip, String port, String id, String pwd, String DB_SID){
-        if(syncMonitorSessionTibero != null) return syncMonitorSessionTibero;
+        if(syncMonitorSessionTibero != null) {
+            System.out.println("is null");
+            return syncMonitorSessionTibero;
+        }
         syncMonitorSessionTibero = new SyncMonitorSessionTibero();
         String DB_URL = "jdbc:tibero:thin:@" + ip + ":" + port + ":" + DB_SID;
+        String DB_DRV = "com.tmax.tibero.jdbc.TbDriver";
         try {
             Class.forName(DB_DRV);
             conn = DriverManager.getConnection(DB_URL, id, pwd);
@@ -29,6 +33,7 @@ public class SyncMonitorSessionTibero {
             System.out.println();
         } catch (Exception ex) {
             System.out.println("fail");
+            System.out.println(ex.getMessage());
             ex.printStackTrace();
         }
         return syncMonitorSessionTibero;

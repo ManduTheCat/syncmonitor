@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class SyncMonitorSessionOracle {
+public class SyncMonitorSessionOracle extends SyncMonitorSession {
 
     private static Connection conn = null;
     private PreparedStatement pstmt = null;
@@ -19,6 +19,7 @@ public class SyncMonitorSessionOracle {
     private static SyncMonitorSessionOracle syncMonitorSessionOracle = null;
     private SyncMonitorSessionOracle(){
     }
+
     public static SyncMonitorSessionOracle getSyncMonitorSession(String ip, String port, String id, String pwd, String DB_SID){
         if(syncMonitorSessionOracle != null) return syncMonitorSessionOracle;
         syncMonitorSessionOracle = new SyncMonitorSessionOracle();
@@ -27,7 +28,7 @@ public class SyncMonitorSessionOracle {
         try {
             Class.forName(DB_DRV);
             conn = DriverManager.getConnection(DB_URL, id, pwd);
-            System.out.println("Oracle Connect Success"); // todo log 파일 별도로 추출
+            System.out.println("Oracle Connect Success");
             System.out.println();
         } catch (Exception ex) {
             System.out.println("fail");

@@ -3,16 +3,17 @@ package syncMonitor.view;
 import syncMonitor.dbLink.Dblink;
 import syncMonitor.dbLink.tibero.OracleToTibero;
 import syncMonitor.dbLink.tibero.TiberoToOracle;
+import syncMonitor.session.SyncMonitorSession;
 import syncMonitor.session.SyncMonitorSessionTibero;
 
 import java.text.SimpleDateFormat;
 
 public class ViewOracle {
-    private SyncMonitorSessionTibero session = null;
+    private SyncMonitorSession session = null;
     private Dblink tiberoToOracle = null;
     private Dblink oracleToTibero = null;
 
-    public ViewOracle(SyncMonitorSessionTibero session, String dbLinkName, String source, String target) {
+    public ViewOracle(SyncMonitorSession session, String dbLinkName, String source, String target) {
         this.session = session;
         this.oracleToTibero = new OracleToTibero(dbLinkName, source, target, session.getConn());
         this.tiberoToOracle = new TiberoToOracle(dbLinkName,target, source, session.getConn());

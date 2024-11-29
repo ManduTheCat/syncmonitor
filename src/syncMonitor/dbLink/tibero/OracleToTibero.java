@@ -55,6 +55,7 @@ public class OracleToTibero implements Dblink {
 
             while (rs.next()) {
                 resultStr = rs.getString(1);
+                Thread.sleep(100);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
