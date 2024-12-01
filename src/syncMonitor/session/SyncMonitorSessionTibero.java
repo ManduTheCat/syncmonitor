@@ -25,7 +25,6 @@ public class SyncMonitorSessionTibero extends SyncMonitorSession{
        // }
         String DB_URL = "jdbc:tibero:thin:@" + ip + ":" + port + ":" + DB_SID;
         String DB_DRV = "com.tmax.tibero.jdbc.TbDriver";
-        System.out.println(DB_URL);
         try {
             System.out.println("Loading Tibero Driver...");
             Class.forName(DB_DRV);
