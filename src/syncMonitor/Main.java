@@ -1,5 +1,7 @@
 package syncMonitor;
 
+import syncMonitor.config.DbConfig;
+import syncMonitor.config.MonitorConfig;
 import syncMonitor.session.SyncMonitorSession;
 import syncMonitor.session.SyncMonitorSessionOracle;
 import syncMonitor.session.SyncMonitorSessionTibero;
@@ -9,49 +11,44 @@ import syncMonitor.view.ViewTibero;
 public class Main {
 
     public static void main(String[] args) {
-        String tiberoIp = "192.168.1.188";
-        String tiberoPort = "4628";
-        String tiberoId = "tibero";
-        String tiberoPwd = "tmax";
-        String tiberoDB_LINK = "jsh_tto";
-        String tiberoUser1 = "jsh_tto"; //tiberoUser1
-        String tiberoUser2 = "jsh_ott"; //tiberoUser2
-        String tiberoDB_SID = "tibero7_2";
+        MonitorConfig config = new MonitorConfig();
+        DbConfig tiberoConfig = config.getTiberoConfig();
+        DbConfig oracleConfig = config.getOracleConfig();
+        System.out.println("Tibero Configuration:");
+        System.out.println(tiberoConfig);
 
-
-
-        // 만드는중
-        String oracleIp = "192.168.1.213";
-        String oraclePort = "1521";
-        String oracleId = "JSH_OTT";
-        String oraclePwd = "jsh";
-        String oracleDB_LINK = "TLINK";  //?
-        String oracleUser1 = "jsh_ott"; //oracleUser1 o -> t 기준
-        String oracleUser2 = "jsh_tto"; //OracleUser2
-        String oracleDB_SID = "KIW";
-
+        System.out.println("\nOracle Configuration:");
+        System.out.println(oracleConfig);
 
         // connection
         SyncMonitorSession sessionTibero = SyncMonitorSessionTibero.getSyncMonitorSession(
-                tiberoIp, tiberoPort, tiberoId, tiberoPwd, tiberoDB_SID
+                tiberoConfig.getIp(),
+                tiberoConfig.getPort(),
+                tiberoConfig.getId(),
+                tiberoConfig.getPwd(),
+                tiberoConfig.getDbSid()
         );
+
 
 //        SyncMonitorSession sessionOracle = SyncMonitorSessionOracle.getSyncMonitorSession(
 //                oracleIp, oraclePort, oracleId, oraclePwd, oracleDB_SID
 //
 //        );
 
-//        System.out.println(sessionOracle.getConn().toString());
 
-        ViewTibero viewTibero = new ViewTibero(sessionTibero, tiberoDB_LINK, tiberoUser1, tiberoUser2);
+
+        ViewTibero viewTibero = new ViewTibero(sessionTibero,
+                tiberoConfig.getDbLink(),
+                tiberoConfig.getUser1(),
+                tiberoConfig.getUser2()
+        );
         viewTibero.doPrint();
 //        ViewOracle viewOracle = new ViewOracle(sessionOracle, oracleDB_LINK, oracleUser1, oracleUser2);
 //        viewOracle.doPrint();
 
 
-
         //end
-        sessionTibero.disconnect();
+        //sessionTibero.disconnect();
 
     }
 
