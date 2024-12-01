@@ -18,22 +18,30 @@ public class SyncMonitorSessionTibero extends SyncMonitorSession{
     private SyncMonitorSessionTibero(){
     }
 
+
     public static SyncMonitorSessionTibero getSyncMonitorSession(String ip, String port, String id, String pwd, String DB_SID){
-        if(syncMonitorSessionTibero != null) {
-            System.out.println("is null");
-            return syncMonitorSessionTibero;
-        }
-        syncMonitorSessionTibero = new SyncMonitorSessionTibero();
+       // if (syncMonitorSessionTibero == null || conn == null) {
+            syncMonitorSessionTibero = new SyncMonitorSessionTibero();
+       // }
         String DB_URL = "jdbc:tibero:thin:@" + ip + ":" + port + ":" + DB_SID;
         String DB_DRV = "com.tmax.tibero.jdbc.TbDriver";
+        System.out.println(DB_URL);
         try {
+            System.out.println("Loading Tibero Driver...");
             Class.forName(DB_DRV);
+            System.out.println("Driver loaded successfully.");
+
+            System.out.println("Connecting to DB...");
+            System.out.println("DB URL: " + DB_URL);
+            System.out.println("DB ID: " + id);
+
             conn = DriverManager.getConnection(DB_URL, id, pwd);
-            System.out.println("Tibero Connect Success"); // todo log 파일 별도로 추출
-            System.out.println();
-        } catch (Exception ex) {
-            System.out.println("fail");
-            System.out.println(ex.getMessage());
+            System.out.println("Tibero Connect Success");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Tibero Driver not found!");
+            ex.printStackTrace();
+        } catch (SQLException ex) {
+            System.out.println("Connection failed: " + ex.getMessage());
             ex.printStackTrace();
         }
         return syncMonitorSessionTibero;
@@ -64,10 +72,9 @@ public class SyncMonitorSessionTibero extends SyncMonitorSession{
     }
 
     public Connection getConn() {
-        if(conn != null){
-            return conn;
+        if (conn == null) {
+            System.out.println("Connection is null. Ensure the database is accessible.");
         }
-        System.out.println("conn is null");
-        return null;
+        return conn;
     }
 }

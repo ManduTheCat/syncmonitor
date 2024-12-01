@@ -1,0 +1,19 @@
+database:
+    tibero:
+      ip: 192.168.1.188
+      port: 4628
+      id: tibero
+      pwd: tmax
+      dbLink: jsh_tto
+      user1: jsh_tto
+      user2: jsh_ott
+      dbSid: tibero7_2
+    oracle:
+      ip: 192.168.1.213
+      port: 1521
+      id: JSH_OTT
+      pwd: jsh
+      dbLink: TLINK
+      user1: jsh_ott
+      user2: jsh_tto
+      dbSid: KIW

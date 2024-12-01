@@ -5,17 +5,22 @@ import syncMonitor.dbLink.tibero.OracleToTibero;
 import syncMonitor.dbLink.tibero.TiberoToOracle;
 import syncMonitor.session.SyncMonitorSession;
 
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
 
 public class ViewTibero {
-    private SyncMonitorSession session = null;
     private Dblink tiberoToOracle = null;
     private Dblink oracleToTibero = null;
 
     public ViewTibero(SyncMonitorSession session, String dbLinkName, String source, String target) {
-        this.session = session;
-        this.oracleToTibero = new OracleToTibero(dbLinkName, source, target, session.getConn());
-        this.tiberoToOracle = new TiberoToOracle(dbLinkName,target, source, session.getConn());
+
+        Connection conn = session.getConn();
+        if (conn == null) {
+            throw new IllegalStateException("Database connection is null. Unable to proceed.");
+        }
+
+        this.tiberoToOracle = new TiberoToOracle(dbLinkName, target, source, conn);
+        this.oracleToTibero = new OracleToTibero(dbLinkName, source, target, conn);
     }
 
     public void doPrint() {

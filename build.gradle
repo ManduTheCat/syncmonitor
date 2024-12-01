@@ -19,6 +19,8 @@ dependencies {
 
     implementation files('tibero7-jdbc.jar')
     implementation files('ojdbc8.jar')
+    implementation 'org.yaml:snakeyaml:2.0'
+
 }
 
 
