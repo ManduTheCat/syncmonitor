@@ -1,5 +1,7 @@
 package syncMonitor.session;
 
+import syncMonitor.config.wrapper.DbConfig.OracleConfig;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,7 +12,7 @@ public class SyncMonitorSessionOracle extends SyncMonitorSession {
     private static Connection conn = null;
     private PreparedStatement pstmt = null;
     private ResultSet rs = null;
-    private static String DB_DRV = "oracle.jdbc.driver.OracleDriver";
+    private static String DB_DRV = "oracle.jdbc.OracleDriver";
     private static String baseURL = "jdbc:oracle:thin:@";
 
     /*
@@ -20,18 +22,20 @@ public class SyncMonitorSessionOracle extends SyncMonitorSession {
     private SyncMonitorSessionOracle(){
     }
 
-    public static SyncMonitorSessionOracle getSyncMonitorSession(String ip, String port, String id, String pwd, String DB_SID){
+    public static SyncMonitorSessionOracle getSyncMonitorSession(OracleConfig oracleConfig){
         if(syncMonitorSessionOracle != null) return syncMonitorSessionOracle;
         syncMonitorSessionOracle = new SyncMonitorSessionOracle();
 
-        String DB_URL = baseURL + ip + ":" + port + ":" + DB_SID;
+        String DB_URL = baseURL + oracleConfig.getIp() + ":" + oracleConfig.getPort() + ":" + oracleConfig.getDbSid();
         try {
             Class.forName(DB_DRV);
-            conn = DriverManager.getConnection(DB_URL, id, pwd);
+            conn = DriverManager.getConnection(DB_URL, oracleConfig.getId(), oracleConfig.getPwd());
             System.out.println("Oracle Connect Success");
             System.out.println();
         } catch (Exception ex) {
-            System.out.println("fail");
+            System.out.println(oracleConfig.getId());
+            System.out.println(oracleConfig.getPwd());
+            System.out.println("Oracle Connect fail");
             ex.printStackTrace();
         }
         return syncMonitorSessionOracle;

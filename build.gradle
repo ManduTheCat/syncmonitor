@@ -18,7 +18,7 @@ sourceSets {
 dependencies {
 
     implementation files('tibero7-jdbc.jar')
-    implementation files('ojdbc8.jar')
+    implementation files('ojdbc6.jar')
     implementation 'org.yaml:snakeyaml:2.0'
 
 }
