@@ -1,5 +1,5 @@
 monitor:
-  mode: oracel-tibero
+  mode: tibero
 database:
     tibero:
       ip: 192.168.1.187
