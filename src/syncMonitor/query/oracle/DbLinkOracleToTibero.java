@@ -47,7 +47,7 @@ public class DbLinkOracleToTibero implements Dblink {
     @Override
     public String doGetTsn() {
 
-        String strSql = "select a.tsn ||'  /  '||b.tsn ||'   /   '|| (a.tsn-b.tsn) from (select to_number(current_scn) as tsn from v$database@" + DB_LINK + ") a , (select to_number(tsn) as tsn from " + this.targetName + ".prs_lct) b";
+        String strSql = "select a.tsn ||'  /  '||b.tsn ||'  /  '|| (a.tsn-b.tsn) from (select to_number(current_scn) as tsn from v$database@" + DB_LINK + ") a , (select to_number(tsn) as tsn from " + this.targetName + ".prs_lct) b";
         String resultStr = "";
         try {
             PreparedStatement pstmt = this.connection.prepareStatement(strSql);

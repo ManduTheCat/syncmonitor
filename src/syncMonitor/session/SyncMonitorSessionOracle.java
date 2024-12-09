@@ -29,13 +29,12 @@ public class SyncMonitorSessionOracle extends SyncMonitorSession {
         String DB_URL = baseURL + oracleConfig.getIp() + ":" + oracleConfig.getPort() + ":" + oracleConfig.getDbSid();
         try {
             Class.forName(DB_DRV);
+            System.out.println("Driver loaded successfully.");
+            System.out.println("Connecting to DB...");
             conn = DriverManager.getConnection(DB_URL, oracleConfig.getId(), oracleConfig.getPwd());
             System.out.println("Oracle Connect Success");
-            System.out.println();
         } catch (Exception ex) {
-            System.out.println(oracleConfig.getId());
-            System.out.println(oracleConfig.getPwd());
-            System.out.println("Oracle Connect fail");
+            System.out.println("Connection failed: " + ex.getMessage());
             ex.printStackTrace();
         }
         return syncMonitorSessionOracle;

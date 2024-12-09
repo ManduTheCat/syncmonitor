@@ -1,4 +1,4 @@
-package syncMonitor.mode.view;
+package view;
 
 public interface View {
     void doPrint();

@@ -4,9 +4,8 @@ import syncMonitor.config.wrapper.DbConfig.OracleConfig;
 import syncMonitor.config.wrapper.DbConfig.TiberoConfig;
 import syncMonitor.config.YmlConfigWrapper;
 import syncMonitor.config.wrapper.MonitorConfig;
-import syncMonitor.mode.BothTiberoOracle;
 import syncMonitor.mode.OnlyTibero;
-import syncMonitor.mode.view.View;
+import view.View;
 
 public class Main {
 
