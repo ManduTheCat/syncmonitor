@@ -30,25 +30,12 @@ public class Main {
         );
 
 
-//        SyncMonitorSession sessionOracle = SyncMonitorSessionOracle.getSyncMonitorSession(
-//                oracleIp, oraclePort, oracleId, oraclePwd, oracleDB_SID
-//
-//        );
-
-
-
         ViewTibero viewTibero = new ViewTibero(sessionTibero,
                 tiberoConfig.getDbLink(),
                 tiberoConfig.getUser1(),
                 tiberoConfig.getUser2()
         );
         viewTibero.doPrint();
-//        ViewOracle viewOracle = new ViewOracle(sessionOracle, oracleDB_LINK, oracleUser1, oracleUser2);
-//        viewOracle.doPrint();
-
-
-        //end
-        //sessionTibero.disconnect();
 
     }
 
