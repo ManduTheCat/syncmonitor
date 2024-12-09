@@ -1,4 +1,4 @@
-package syncMonitor.mode.view;
+package view;
 
 import syncMonitor.config.wrapper.DbConfig.TiberoConfig;
 import syncMonitor.query.Dblink;
@@ -33,27 +33,27 @@ public class ViewTibero implements View{
                 java.util.Date d = new java.util.Date();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
 
-                System.out.println("=============================");
+                System.out.println("============================================");
                 System.out.println("Prosync Monitor for 4");
-                System.out.println("=============================");
+                System.out.println("============================================");
                 System.out.println("IN Tibero");
-                System.out.println("================================");
+                System.out.println("============================================");
                 System.out.println("Current Time: " + sdf.format(d).toString());
                 System.out.println(" ");
-                System.out.println("================================");
-                System.out.println("Sync way" + "SOURCE TSN : TARGET TSN : TSN_GAP ");
-                System.out.println("================================");
+                System.out.println("============================================");
+                System.out.println("SyncWay : "+"SOURCE_TSN : TARGET_TSN : TSN_GAP ");
+                System.out.println("============================================");
                 //System.out.println("U3->AH" +"  :  "+ sMon.gather("p_u3","p_ah"));// 수정 필요
-                System.out.println("T2O" + "  :  " + tiberoToOracle.doGetTsn());
-                System.out.println("O2T" + "  :  " + oracleToTibero.doGetTsn());
+                System.out.println("T2O" + "     : " + tiberoToOracle.doGetTsn());
+                System.out.println("O2T" + "     : " + oracleToTibero.doGetTsn());
                 //System.out.println("AH->U3" +"  :  "+ sMon.gather("p_ah","p_u3"));// 수정 필요
-                System.out.println("================================");
+                System.out.println("============================================");
                 System.out.println(" ");
                 System.out.println("CURENT_TIME : LAST COMMIT TIME");
-                System.out.println("--<T20>----------------------------");
+                System.out.println("--<T20>------------------------------------");
                 System.out.println(sdf.format(d).toString() + " / " + tiberoToOracle.doGetTime());// 수정 필요
                 //System.out.println(sdf.format(d).toString() +" / "+ sMon.getTXtime("tlink","tlink"));// 수정 필요
-                System.out.println("--<O2T>---------------------------- ");
+                System.out.println("--<O2T>------------------------------------ ");
                 System.out.println(sdf.format(d).toString() + " / " + oracleToTibero.doGetTime());// 수정 필요
                 //System.out.println(sdf.format(d).toString() +" / "+ sMon.getTXtime("p_ah","p_u3"));// 수정 필요
                 System.out.println(" ");

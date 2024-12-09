@@ -24,7 +24,7 @@ public class DbLinkTiberoToOracle implements Dblink {
     //a 는 티베로 b 는 오라클
     @Override
     public String doGetTsn() {
-        String strSql = "select a.tsn ||'  /  '||b.tsn ||'   /   '|| (a.tsn-b.tsn) from (select to_number(current_tsn) as tsn from v$database) a , (select to_number(tsn) as tsn from " + targetName + ".prs_lct@" + DB_LINK + ") b";
+        String strSql = "select a.tsn ||'  /  '||b.tsn ||'  /  '|| (a.tsn-b.tsn) from (select to_number(current_tsn) as tsn from v$database) a , (select to_number(tsn) as tsn from " + targetName + ".prs_lct@" + DB_LINK + ") b";
 
         String resultStr = "";
 

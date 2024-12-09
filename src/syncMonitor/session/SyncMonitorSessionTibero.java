@@ -31,15 +31,10 @@ public class SyncMonitorSessionTibero extends SyncMonitorSession{
             System.out.println("Loading Tibero Driver...");
             Class.forName(DB_DRV);
             System.out.println("Driver loaded successfully.");
-
             System.out.println("Connecting to DB...");
-            System.out.println("DB URL: " + DB_URL);
-            System.out.println("DB ID: " + tiberoConfig.getId());
-
             conn = DriverManager.getConnection(DB_URL, tiberoConfig.getId(), tiberoConfig.getPwd());
             System.out.println("Tibero Connect Success");
         } catch (ClassNotFoundException ex) {
-            System.out.println("Tibero Driver not found!");
             ex.printStackTrace();
         } catch (SQLException ex) {
             System.out.println("Connection failed: " + ex.getMessage());
