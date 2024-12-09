@@ -1,5 +1,7 @@
 package syncMonitor.session;
 
+import syncMonitor.config.wrapper.DbConfig.TiberoConfig;
+
 import java.sql.*;
 
 public class SyncMonitorSessionTibero extends SyncMonitorSession{
@@ -19,11 +21,11 @@ public class SyncMonitorSessionTibero extends SyncMonitorSession{
     }
 
 
-    public static SyncMonitorSessionTibero getSyncMonitorSession(String ip, String port, String id, String pwd, String DB_SID){
+    public static SyncMonitorSessionTibero getSyncMonitorSession(TiberoConfig tiberoConfig){
        // if (syncMonitorSessionTibero == null || conn == null) {
             syncMonitorSessionTibero = new SyncMonitorSessionTibero();
        // }
-        String DB_URL = "jdbc:tibero:thin:@" + ip + ":" + port + ":" + DB_SID;
+        String DB_URL = "jdbc:tibero:thin:@" + tiberoConfig.getIp() + ":" + tiberoConfig.getPort() + ":" + tiberoConfig.getDbSid();
         String DB_DRV = "com.tmax.tibero.jdbc.TbDriver";
         try {
             System.out.println("Loading Tibero Driver...");
@@ -32,9 +34,9 @@ public class SyncMonitorSessionTibero extends SyncMonitorSession{
 
             System.out.println("Connecting to DB...");
             System.out.println("DB URL: " + DB_URL);
-            System.out.println("DB ID: " + id);
+            System.out.println("DB ID: " + tiberoConfig.getId());
 
-            conn = DriverManager.getConnection(DB_URL, id, pwd);
+            conn = DriverManager.getConnection(DB_URL, tiberoConfig.getId(), tiberoConfig.getPwd());
             System.out.println("Tibero Connect Success");
         } catch (ClassNotFoundException ex) {
             System.out.println("Tibero Driver not found!");

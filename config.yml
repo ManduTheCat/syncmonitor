@@ -1,6 +1,8 @@
+monitor:
+  mode: oracel-tibero
 database:
     tibero:
-      ip: 192.168.1.188
+      ip: 192.168.1.187
       port: 4628
       id: tibero
       pwd: tmax
@@ -9,11 +11,11 @@ database:
       user2: jsh_ott
       dbSid: tibero7_2
     oracle:
-      ip: 192.168.1.213
-      port: 1521
+      ip: 192.168.1.188
+      port: 1525
       id: JSH_OTT
       pwd: jsh
-      dbLink: TLINK
+      dbLink: oraclesb
       user1: jsh_ott
       user2: jsh_tto
       dbSid: KIW

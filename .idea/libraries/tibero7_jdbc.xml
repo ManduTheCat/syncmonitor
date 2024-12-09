@@ -2,7 +2,7 @@
   <library name="tibero7-jdbc">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/tibero7-jdbc.jar!/" />
-      <root url="jar://$PROJECT_DIR$/ojdbc8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ojdbc6.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
