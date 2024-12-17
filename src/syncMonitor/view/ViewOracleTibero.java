@@ -1,6 +1,8 @@
 package syncMonitor.view;
 
 
+import de.vandermeer.asciitable.AsciiTable;
+import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 import syncMonitor.config.wrapper.DbConfig.OracleConfig;
 import syncMonitor.config.wrapper.DbConfig.TiberoConfig;
 import syncMonitor.query.oracle.OracleOnly;
@@ -9,6 +11,8 @@ import syncMonitor.session.SyncMonitorSessionOracle;
 import syncMonitor.session.SyncMonitorSessionTibero;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ViewOracleTibero implements View {
 
@@ -20,47 +24,61 @@ public class ViewOracleTibero implements View {
     public ViewOracleTibero(SyncMonitorSessionOracle oracelSession, OracleConfig oracleConfig, SyncMonitorSessionTibero tiberoSesseion, TiberoConfig tiberoConfig) {
         this.oracelSession = oracelSession;
         this.tiberoSesseion = tiberoSesseion;
-        tiberoOnly = new TiberoOnly(tiberoConfig,tiberoSesseion.getConn());
+        tiberoOnly = new TiberoOnly(tiberoConfig, tiberoSesseion.getConn());
         oracleOnly = new OracleOnly(oracleConfig, oracelSession.getConn());
     }
 
 
     @Override
     public void genView() {
-
         try {
-                java.util.Date d = new java.util.Date();
-                Integer tiberoPrsLct = Integer.parseInt(tiberoOnly.doGetPrs_lct());
-                Integer tiberoTsn = Integer.parseInt(tiberoOnly.doGetTsn());
-                Integer oraclePrsLct = Integer.parseInt(oracleOnly.doGetPrsLct());
-                Integer oracleSCN = Integer.parseInt(oracleOnly.doGetSCN());
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
-                System.out.println("======================================");
-                System.out.println("Prosync Monitor for 4");
-                System.out.println("======================================");
-                System.out.println("IN Tibero and Oracle");
-                System.out.println("====================================================================================================");
-                System.out.println("Current Time: " + sdf.format(d).toString());
-                System.out.println(" ");
-                System.out.println("====================================================================================================");
-                System.out.println("Sync way" + " SOURCE TSN   :   TARGET TSN    : TSN_GAP ");
-                System.out.println("====================================================================================================");
-                //System.out.println("U3->AH" +"  :  "+ sMon.gather("p_u3","p_ah"));// 수정 필요
-                System.out.println("T->O " + "  :  " + tiberoTsn + " / " + oraclePrsLct + " / " + (tiberoPrsLct-tiberoTsn));
-                System.out.println("O->T " + "  :  " + oracleSCN + " / " + tiberoPrsLct + " / " + (oraclePrsLct-oracleSCN));
-                //System.out.println("AH->U3" +"  :  "+ sMon.gather("p_ah","p_u3"));// 수정 필요
-                System.out.println("====================================================================================================");
-                System.out.println(" ");
-                System.out.println("CURENT_TIME         :       LAST COMMIT TIME");
-                System.out.println("--<T20>---------------------------------------------------------------------------------- ");
-                System.out.println(sdf.format(d).toString() + " / "  );// 수정 필요
-                //System.out.println(sdf.format(d).toString() +" / "+ sMon.getTXtime("tlink","tlink"));// 수정 필요
-                System.out.println("--<O2T>---------------------------------------------------------------------------------- ");
-                System.out.println(sdf.format(d).toString() + " / " );// 수정 필요
-                //System.out.println(sdf.format(d).toString() +" / "+ sMon.getTXtime("p_ah","p_u3"));// 수정 필요
-                System.out.println(" ");
-                System.out.println(" ");
-                System.out.println(" ");
+            System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
+            System.out.flush();
+            Integer tiberoPrsLct = Integer.parseInt(tiberoOnly.doGetPrs_lct());
+            Integer tiberoTsn = Integer.parseInt(tiberoOnly.doGetTsn());
+            Integer oraclePrsLct = Integer.parseInt(oracleOnly.doGetPrsLct());
+            Integer oracleSCN = Integer.parseInt(oracleOnly.doGetSCN());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            // Clean up the input string to remove .0 or any trailing fractional seconds
+            String tiberoTime = tiberoOnly.doGetTime().split("\\.")[0];
+            String oracleTime = oracleOnly.doGetTime().split("\\.")[0];
+
+            LocalDateTime tiberoLastCommitTime = LocalDateTime.parse(tiberoTime, formatter);
+            LocalDateTime oracleLastCommitTime = LocalDateTime.parse(oracleTime, formatter);
+
+            AsciiTable asciiTitle = new AsciiTable();
+            asciiTitle.addRow("Prosync Monitor - Tibero & Oracle Sync Status").setTextAlignment(TextAlignment.CENTER);
+            asciiTitle.getContext().setWidth(50);
+            String titleRender = asciiTitle.render(50);
+            System.out.println(titleRender);
+
+            AsciiTable asciiTableTSn= new AsciiTable();
+            asciiTableTSn.addRule();
+            asciiTableTSn.addRow("Sync way", "SOURCE TSN ", "TARGET TSN", "TSN_GAP");
+            asciiTableTSn.addRule();
+            asciiTableTSn.addRow("T->O", tiberoTsn, oraclePrsLct, (tiberoPrsLct - oraclePrsLct));
+            asciiTableTSn.addRule();
+            asciiTableTSn.addRow("O->T", oracleSCN, tiberoPrsLct, (oracleSCN - tiberoPrsLct));
+            asciiTableTSn.addRule();
+            asciiTableTSn.setTextAlignment(TextAlignment.CENTER);
+            String tsnRender = asciiTableTSn.render(50);
+            System.out.println(tsnRender);
+
+            AsciiTable asciiTableTime= new AsciiTable();
+            asciiTableTime.addRule();
+            asciiTableTime.addRow("curr time" , LocalDateTime.now().format(formatter));
+            asciiTableTime.addRule();
+            asciiTableTime.addRow("oracle last commit" , oracleLastCommitTime);
+            asciiTableTime.addRule();
+            asciiTableTime.addRow("tibero last commit" , tiberoLastCommitTime);
+            asciiTableTime.addRule();
+            asciiTableTime.setTextAlignment(TextAlignment.CENTER);
+            String timeRender = asciiTableTime.render(50);
+            System.out.println(timeRender);
+            System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
+            System.out.flush();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -9,13 +9,13 @@ topology:
       port: 4628
       id: tibero
       pwd: tmax
-      user: jsh_tto
+      user: jsh_ott
       dbSid: tibero7_2
     target2:
       db: oracle
-      ip: 192.168.1.213
-      port: 1521
+      ip: 192.168.1.188
+      port: 1525
       id: JSH_OTT
       pwd: jsh
-      user: jsh_ott
-      dbSid: KIW
+      user: jsh_tto
+      dbSid: oraclesb
