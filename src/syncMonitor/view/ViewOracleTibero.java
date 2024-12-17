@@ -1,85 +1,68 @@
 package syncMonitor.view;
 
-
 import de.vandermeer.asciitable.AsciiTable;
 import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
-import syncMonitor.config.wrapper.DbConfig.OracleConfig;
-import syncMonitor.config.wrapper.DbConfig.TiberoConfig;
 import syncMonitor.query.oracle.OracleOnly;
 import syncMonitor.query.tibero.TiberoOnly;
-import syncMonitor.session.SyncMonitorSessionOracle;
-import syncMonitor.session.SyncMonitorSessionTibero;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
+// 노멀에서 전달받고 dto 만들면서 유일 새션 생성
 public class ViewOracleTibero implements View {
 
-    private SyncMonitorSessionOracle oracelSession = null;
-    private SyncMonitorSessionTibero tiberoSesseion = null;
-    private OracleOnly oracleOnly = null;
-    private TiberoOnly tiberoOnly = null;
+    private final List<TopologyDto> topologyDtos;
 
-    public ViewOracleTibero(SyncMonitorSessionOracle oracelSession, OracleConfig oracleConfig, SyncMonitorSessionTibero tiberoSesseion, TiberoConfig tiberoConfig) {
-        this.oracelSession = oracelSession;
-        this.tiberoSesseion = tiberoSesseion;
-        tiberoOnly = new TiberoOnly(tiberoConfig, tiberoSesseion.getConn());
-        oracleOnly = new OracleOnly(oracleConfig, oracelSession.getConn());
+    public ViewOracleTibero(List<TopologyDto> topologyDtos) {
+        this.topologyDtos = topologyDtos;
     }
-
 
     @Override
     public void genView() {
         try {
-
-            Integer tiberoPrsLct = Integer.parseInt(tiberoOnly.doGetPrs_lct());
-            Integer tiberoTsn = Integer.parseInt(tiberoOnly.doGetTsn());
-            Integer oraclePrsLct = Integer.parseInt(oracleOnly.doGetPrsLct());
-            Integer oracleSCN = Integer.parseInt(oracleOnly.doGetSCN());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-            // Clean up the input string to remove .0 or any trailing fractional seconds
-            String tiberoTime = tiberoOnly.doGetTime().split("\\.")[0];
-            String oracleTime = oracleOnly.doGetTime().split("\\.")[0];
-
-            LocalDateTime tiberoLastCommitTime = LocalDateTime.parse(tiberoTime, formatter);
-            LocalDateTime oracleLastCommitTime = LocalDateTime.parse(oracleTime, formatter);
-
+            // 제목 출력
             AsciiTable asciiTitle = new AsciiTable();
+            asciiTitle.addRule();
             asciiTitle.addRow("Prosync Monitor - Tibero & Oracle Sync Status").setTextAlignment(TextAlignment.CENTER);
-            asciiTitle.getContext().setWidth(50);
-            String titleRender = asciiTitle.render(50);
-            System.out.println(titleRender);
+            asciiTitle.addRule();
+            System.out.println(asciiTitle.render(80));
 
-            AsciiTable asciiTableTSn= new AsciiTable();
-            asciiTableTSn.addRule();
-            asciiTableTSn.addRow("Sync way", "SOURCE TSN ", "TARGET TSN", "TSN_GAP");
-            asciiTableTSn.addRule();
-            asciiTableTSn.addRow("T->O", tiberoTsn, oraclePrsLct, (tiberoPrsLct - oraclePrsLct));
-            asciiTableTSn.addRule();
-            asciiTableTSn.addRow("O->T", oracleSCN, tiberoPrsLct, (oracleSCN - tiberoPrsLct));
-            asciiTableTSn.addRule();
-            asciiTableTSn.setTextAlignment(TextAlignment.CENTER);
-            String tsnRender = asciiTableTSn.render(50);
-            System.out.println(tsnRender);
+            // 상태 테이블
+            AsciiTable asciiTable = new AsciiTable();
+            asciiTable.addRule();
+            asciiTable.addRow("TOPOLOGY", "Sync way", "SOURCE TSN", "TARGET TSN", "TSN_GAP");
+            asciiTable.addRule();
 
-            AsciiTable asciiTableTime= new AsciiTable();
-            asciiTableTime.addRule();
-            asciiTableTime.addRow("curr time" , LocalDateTime.now().format(formatter));
-            asciiTableTime.addRule();
-            asciiTableTime.addRow("oracle last commit" , oracleLastCommitTime);
-            asciiTableTime.addRule();
-            asciiTableTime.addRow("tibero last commit" , tiberoLastCommitTime);
-            asciiTableTime.addRule();
-            asciiTableTime.setTextAlignment(TextAlignment.CENTER);
-            String timeRender = asciiTableTime.render(50);
-            System.out.println(timeRender);
-            System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
-            System.out.flush();
+            for (TopologyDto topology : topologyDtos) {
+                // DTO에서 객체 가져오기
+                TiberoOnly tiberoOnly = topology.getTiberoOnly();
+                OracleOnly oracleOnly = topology.getOracleOnly();
+
+                // 데이터 조회
+                Integer tiberoTsn = Integer.parseInt(tiberoOnly.doGetTsn());
+                Integer oraclePrsLct = Integer.parseInt(oracleOnly.doGetPrsLct());
+                Integer tiberoPrsLct = Integer.parseInt(tiberoOnly.doGetPrs_lct());
+                Integer oracleSCN = Integer.parseInt(oracleOnly.doGetSCN());
+
+                // 테이블 행 추가
+                asciiTable.addRow(topology.getName(), "T->O", tiberoTsn, oraclePrsLct, (tiberoPrsLct - oraclePrsLct));
+                asciiTable.addRule();
+                asciiTable.addRow(topology.getName(), "O->T", oracleSCN, tiberoPrsLct, (oracleSCN - tiberoPrsLct));
+                asciiTable.addRule();
+            }
+
+            // 테이블 출력
+            asciiTable.setTextAlignment(TextAlignment.CENTER);
+            System.out.println(asciiTable.render(80));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    public List<TopologyDto> getTopologyDtos() {
+        return topologyDtos;
+    }
+
 }

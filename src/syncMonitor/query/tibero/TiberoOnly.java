@@ -51,9 +51,11 @@ public class TiberoOnly {
 
         String strSql = "select to_number(tsn) as tsn from " + this.targetName + ".prs_lct";
         String resultStr = "";
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement pstmt = this.connection.prepareStatement(strSql);
-            ResultSet rs = pstmt.executeQuery();
+            pstmt = this.connection.prepareStatement(strSql);
+            rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 resultStr = rs.getString(1);
@@ -61,6 +63,13 @@ public class TiberoOnly {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+            } catch (SQLException e) {
+                System.err.println("[ERROR] Failed to close resources: " + e.getMessage());
+            }
         }
 
         return resultStr;
@@ -70,9 +79,11 @@ public class TiberoOnly {
 
         String strSql = "select current_tsn as tsn from v$database";
         String resultStr = "";
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement pstmt = this.connection.prepareStatement(strSql);
-            ResultSet rs = pstmt.executeQuery();
+            pstmt = this.connection.prepareStatement(strSql);
+            rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 resultStr = rs.getString(1);
@@ -80,6 +91,13 @@ public class TiberoOnly {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+            } catch (SQLException e) {
+                System.err.println("[ERROR] Failed to close resources: " + e.getMessage());
+            }
         }
 
         return resultStr;
