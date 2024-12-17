@@ -15,7 +15,7 @@ public class OracleOnly {
 
     public OracleOnly(OracleConfig oracleConfig, Connection connection) {
         this.connection = connection;
-        this.username = oracleConfig.getUser2();
+        this.username = oracleConfig.getDblinkUser();
     }
 
     public String doGetTime() {

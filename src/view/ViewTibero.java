@@ -21,8 +21,8 @@ public class ViewTibero implements View{
         }
 
         // user2 user1 이 모호함
-        this.tiberoToOracle = new DbLinkTiberoToOracle(tiberoConfig.getDbLink(), tiberoConfig.getUser2(), tiberoConfig.getUser1(), conn);
-        this.oracleToTibero = new DbLinkOracleToTibero(tiberoConfig.getDbLink(), tiberoConfig.getUser1(), tiberoConfig.getUser2(), conn);
+        this.tiberoToOracle = new DbLinkTiberoToOracle(tiberoConfig.getDbLink(), tiberoConfig.getDblinkUser(), tiberoConfig.getUser(), conn);
+        this.oracleToTibero = new DbLinkOracleToTibero(tiberoConfig.getDbLink(), tiberoConfig.getUser(), tiberoConfig.getDblinkUser(), conn);
     }
 
     @Override

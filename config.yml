@@ -1,21 +1,21 @@
 monitor:
-  mode: tibero
-database:
-    tibero:
+  mode: wide
+topology:
+  - name: sync1
+    mode: normal
+    target1:
+      db: tibero
       ip: 192.168.1.187
       port: 4628
       id: tibero
       pwd: tmax
-      dbLink: jsh_tto
-      user1: jsh_tto
-      user2: jsh_ott
+      user: jsh_tto
       dbSid: tibero7_2
-    oracle:
-      ip: 192.168.1.188
-      port: 1525
+    target2:
+      db: oracle
+      ip: 192.168.1.213
+      port: 1521
       id: JSH_OTT
       pwd: jsh
-      dbLink: oraclesb
-      user1: jsh_ott
-      user2: jsh_tto
+      user: jsh_ott
       dbSid: KIW

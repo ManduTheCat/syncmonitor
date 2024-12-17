@@ -16,7 +16,7 @@ public class TiberoOnly {
 
     public TiberoOnly(TiberoConfig tiberoConfig, Connection connection) {
         this.connection = connection;
-        this.targetName = tiberoConfig.getUser2();
+        this.targetName = tiberoConfig.getDblinkUser();
     }
 
     public String doGetTime() {

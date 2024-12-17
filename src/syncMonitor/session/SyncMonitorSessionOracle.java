@@ -1,5 +1,6 @@
 package syncMonitor.session;
 
+import syncMonitor.config.wrapper.DbConfig.DbConfig;
 import syncMonitor.config.wrapper.DbConfig.OracleConfig;
 
 import java.sql.Connection;
@@ -22,7 +23,7 @@ public class SyncMonitorSessionOracle extends SyncMonitorSession {
     private SyncMonitorSessionOracle(){
     }
 
-    public static SyncMonitorSessionOracle getSyncMonitorSession(OracleConfig oracleConfig){
+    public static SyncMonitorSessionOracle getSyncMonitorSession(DbConfig oracleConfig){
         if(syncMonitorSessionOracle != null) return syncMonitorSessionOracle;
         syncMonitorSessionOracle = new SyncMonitorSessionOracle();
 
