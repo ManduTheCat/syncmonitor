@@ -50,6 +50,7 @@ public class Main {
                     char userInput = (char) System.in.read();
                     if (userInput == 'x' || userInput == 'X') {
                         System.out.println("[INFO] Exiting program...");
+
                         System.out.println("\u001B[H\u001B[2J");
                         System.out.flush();
                         return; // main 종료
