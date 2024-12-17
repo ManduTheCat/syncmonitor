@@ -1,4 +1,4 @@
-package view;
+package syncMonitor.view;
 
 import syncMonitor.config.wrapper.DbConfig.TiberoConfig;
 import syncMonitor.query.Dblink;
@@ -21,12 +21,12 @@ public class ViewTibero implements View{
         }
 
         // user2 user1 이 모호함
-        this.tiberoToOracle = new DbLinkTiberoToOracle(tiberoConfig.getDbLink(), tiberoConfig.getUser2(), tiberoConfig.getUser1(), conn);
-        this.oracleToTibero = new DbLinkOracleToTibero(tiberoConfig.getDbLink(), tiberoConfig.getUser1(), tiberoConfig.getUser2(), conn);
+        this.tiberoToOracle = new DbLinkTiberoToOracle(tiberoConfig.getDbLink(), tiberoConfig.getDblinkUser(), tiberoConfig.getUser(), conn);
+        this.oracleToTibero = new DbLinkOracleToTibero(tiberoConfig.getDbLink(), tiberoConfig.getUser(), tiberoConfig.getDblinkUser(), conn);
     }
 
     @Override
-    public void doPrint() {
+    public void genView() {
 
         try {
             for (int i = 0; i < 100000000; i++) { // 제한두는 이유?

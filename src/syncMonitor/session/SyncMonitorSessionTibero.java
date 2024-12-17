@@ -1,5 +1,6 @@
 package syncMonitor.session;
 
+import syncMonitor.config.wrapper.DbConfig.DbConfig;
 import syncMonitor.config.wrapper.DbConfig.TiberoConfig;
 
 import java.sql.*;
@@ -21,7 +22,7 @@ public class SyncMonitorSessionTibero extends SyncMonitorSession{
     }
 
 
-    public static SyncMonitorSessionTibero getSyncMonitorSession(TiberoConfig tiberoConfig){
+    public static SyncMonitorSessionTibero getSyncMonitorSession(DbConfig tiberoConfig){
        // if (syncMonitorSessionTibero == null || conn == null) {
             syncMonitorSessionTibero = new SyncMonitorSessionTibero();
        // }

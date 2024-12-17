@@ -5,6 +5,7 @@ import syncMonitor.config.wrapper.DbConfig.OracleConfig;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class OracleOnly {
     private String username;
@@ -15,16 +16,17 @@ public class OracleOnly {
 
     public OracleOnly(OracleConfig oracleConfig, Connection connection) {
         this.connection = connection;
-        this.username = oracleConfig.getUser2();
+        this.username = oracleConfig.getUser();
     }
 
     public String doGetTime() {
         String rlt = "";
         String strSql = "select time from " + this.username + ".prs_lct";
-
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement pstmt = this.connection.prepareStatement(strSql);
-            ResultSet rs = pstmt.executeQuery();
+            pstmt = this.connection.prepareStatement(strSql);
+            rs = pstmt.executeQuery();
             while (rs.next()) {
                 rlt = rs.getString(1);
                 Thread.sleep(100);
@@ -32,6 +34,13 @@ public class OracleOnly {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+            } catch (SQLException e) {
+                System.err.println("[ERROR] Failed to close resources: " + e.getMessage());
+            }
         }
         return rlt;
     }

@@ -3,11 +3,13 @@ package syncMonitor.config.wrapper;
 import syncMonitor.config.wrapper.DbConfig.DatabaseConfig;
 import syncMonitor.config.wrapper.DbConfig.OracleConfig;
 import syncMonitor.config.wrapper.DbConfig.TiberoConfig;
+import syncMonitor.config.wrapper.DbConfig.TopologyConfig;
+
+import java.util.List;
 
 public class ConfigWrapper {
     private MonitorConfig monitor;
-    private DatabaseConfig database;
-
+    private List<TopologyConfig> topology;
 
     public void setMonitor(MonitorConfig monitorConfig) {
         this.monitor = monitorConfig;
@@ -17,18 +19,17 @@ public class ConfigWrapper {
         return monitor;
     }
 
-    public DatabaseConfig getDatabase() {
-        return database;
+     // 여러 topology 항목
+
+    public List<TopologyConfig> getTopology() {
+        return topology;
+    }
+    public void setTopology(List<TopologyConfig> topology) {
+        this.topology = topology;
     }
 
-    public void setDatabase(DatabaseConfig database) {
-        this.database = database;
-    }
-    public TiberoConfig getTiberoConfig() {
-        return getDatabase().getTibero();
-    }
-
-    public OracleConfig getOracleConfig() {
-        return getDatabase().getOracle();
+    @Override
+    public String toString() {
+        return "ConfigWrapper{monitor='" + monitor + "', topology=" + topology + "}";
     }
 }

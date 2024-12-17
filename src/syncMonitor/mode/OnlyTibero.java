@@ -3,7 +3,7 @@ package syncMonitor.mode;
 import syncMonitor.config.wrapper.DbConfig.TiberoConfig;
 import syncMonitor.session.SyncMonitorSession;
 import syncMonitor.session.SyncMonitorSessionTibero;
-import view.ViewTibero;
+import syncMonitor.view.ViewTibero;
 
 // 티베로 통해 오라클 가져오는 모드 티베로만 연결하면됨
 public class OnlyTibero {

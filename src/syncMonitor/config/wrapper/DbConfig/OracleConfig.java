@@ -57,7 +57,7 @@ public class OracleConfig implements DbConfig {
     }
 
     @Override
-    public String getUser1() {
+    public String getUser() {
         return user1;
     }
 
@@ -66,7 +66,7 @@ public class OracleConfig implements DbConfig {
     }
 
     @Override
-    public String getUser2() {
+    public String getDblinkUser() {
         return user2;
     }
 

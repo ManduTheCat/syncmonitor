@@ -1,4 +1,4 @@
-package view;
+package syncMonitor.view;
 
 import syncMonitor.config.wrapper.DbConfig.OracleConfig;
 import syncMonitor.session.SyncMonitorSession;
@@ -17,7 +17,7 @@ public class ViewOracle implements View{
     }
 
     @Override
-    public void doPrint() {
+    public void genView() {
 
         try {
             for (int i = 0; i < 100000000; i++) { // 제한두는 이유?
