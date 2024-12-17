@@ -5,6 +5,7 @@ import syncMonitor.query.Dblink;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class DbLinkOracleToTibero implements Dblink {
 
@@ -27,10 +28,11 @@ public class DbLinkOracleToTibero implements Dblink {
     public String doGetTime() {
         String rlt = "";
         String strSql = "select time from " + this.targetName + ".prs_lct";
-
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement pstmt = this.connection.prepareStatement(strSql);
-            ResultSet rs = pstmt.executeQuery();
+            pstmt = this.connection.prepareStatement(strSql);
+            rs = pstmt.executeQuery();
             while (rs.next()) {
                 rlt = rs.getString(1);
                 Thread.sleep(100);
@@ -38,20 +40,29 @@ public class DbLinkOracleToTibero implements Dblink {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+            } catch (SQLException e) {
+                System.err.println("[ERROR] Failed to close resources: " + e.getMessage());
+            }
         }
+
+
         return rlt;
     }
-
-
 
     @Override
     public String doGetTsn() {
 
         String strSql = "select a.tsn ||'  /  '||b.tsn ||'  /  '|| (a.tsn-b.tsn) from (select to_number(current_scn) as tsn from v$database@" + DB_LINK + ") a , (select to_number(tsn) as tsn from " + this.targetName + ".prs_lct) b";
         String resultStr = "";
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement pstmt = this.connection.prepareStatement(strSql);
-            ResultSet rs = pstmt.executeQuery();
+            pstmt = this.connection.prepareStatement(strSql);
+            rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 resultStr = rs.getString(1);
@@ -59,6 +70,13 @@ public class DbLinkOracleToTibero implements Dblink {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+            } catch (SQLException e) {
+                System.err.println("[ERROR] Failed to close resources: " + e.getMessage());
+            }
         }
 
         return resultStr;

@@ -5,6 +5,7 @@ import syncMonitor.query.Dblink;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class DbLinkTiberoToOracle implements Dblink {
     private String sourceName;
@@ -27,10 +28,11 @@ public class DbLinkTiberoToOracle implements Dblink {
         String strSql = "select a.tsn ||'  /  '||b.tsn ||'  /  '|| (a.tsn-b.tsn) from (select to_number(current_tsn) as tsn from v$database) a , (select to_number(tsn) as tsn from " + targetName + ".prs_lct@" + DB_LINK + ") b";
 
         String resultStr = "";
-
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement pstmt = this.conection.prepareStatement(strSql);
-            ResultSet rs = pstmt.executeQuery();
+            pstmt = this.conection.prepareStatement(strSql);
+            rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 resultStr = rs.getString(1);
@@ -38,6 +40,13 @@ public class DbLinkTiberoToOracle implements Dblink {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+            } catch (SQLException e) {
+                System.err.println("[ERROR] Failed to close resources: " + e.getMessage());
+            }
         }
         /*todo
          * 결과 검사 하는 로직 필요
@@ -49,16 +58,24 @@ public class DbLinkTiberoToOracle implements Dblink {
     public String doGetTime() {
         String rlt = "";
         String strSql = "select time from " + targetName + ".prs_lct@" + DB_LINK;
-
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement pstmt = this.conection.prepareStatement(strSql);
-            ResultSet rs = pstmt.executeQuery();
+            pstmt = this.conection.prepareStatement(strSql);
+            rs = pstmt.executeQuery();
             while (rs.next()) {
                 rlt = rs.getString(1);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+            } catch (SQLException e) {
+                System.err.println("[ERROR] Failed to close resources: " + e.getMessage());
+            }
         }
         return rlt;
     }

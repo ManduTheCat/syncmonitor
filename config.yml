@@ -19,3 +19,21 @@ topology:
       pwd: jsh
       user: jsh_tto
       dbSid: oraclesb
+  - name: sync2
+    mode: normal
+    target1:
+      db: tibero
+      ip: 192.168.1.187
+      port: 4628
+      id: tibero
+      pwd: tmax
+      user: jsh_ott
+      dbSid: tibero7_2
+    target2:
+      db: oracle
+      ip: 192.168.1.188
+      port: 1525
+      id: JSH_OTT
+      pwd: jsh
+      user: jsh_tto
+      dbSid: oraclesb

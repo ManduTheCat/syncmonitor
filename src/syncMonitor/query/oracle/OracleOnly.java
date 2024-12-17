@@ -50,9 +50,11 @@ public class OracleOnly {
 
         String getOracelLct = "select to_number(tsn) as tsn from " + this.username + ".prs_lct b";
         String resultStr = "";
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement pstmt = this.connection.prepareStatement(getOracelLct);
-            ResultSet rs = pstmt.executeQuery();
+            pstmt = this.connection.prepareStatement(getOracelLct);
+            rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 resultStr = rs.getString(1);
@@ -60,6 +62,13 @@ public class OracleOnly {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+            } catch (SQLException e) {
+                System.err.println("[ERROR] Failed to close resources: " + e.getMessage());
+            }
         }
 
         return resultStr;
@@ -67,9 +76,11 @@ public class OracleOnly {
     public String doGetSCN(){
         String getOracelLct = "select current_scn as tsn from v$database";
         String resultStr = "";
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement pstmt = this.connection.prepareStatement(getOracelLct);
-            ResultSet rs = pstmt.executeQuery();
+            pstmt = this.connection.prepareStatement(getOracelLct);
+            rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 resultStr = rs.getString(1);
@@ -77,6 +88,13 @@ public class OracleOnly {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+            } catch (SQLException e) {
+                System.err.println("[ERROR] Failed to close resources: " + e.getMessage());
+            }
         }
 
         return resultStr;
