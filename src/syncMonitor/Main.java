@@ -33,17 +33,19 @@ public class Main {
             System.out.println("\n[INFO] Program terminated by user.");
         }));
 
-        System.out.println("Press 'x' to exit...\n");
-
-        // 무한 루프: View 리스트 돌면서 출력
         try {
-            System.out.println("\u001B[H\u001B[2J");
+            System.out.println("\u001B[H\u001B[2J"); // 화면 clear
             System.out.flush();
             while (true) {
-                System.out.println("Press 'x' to exit...\n");
+                System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
+                System.out.flush();
+                System.out.println("press 'ctl + c' to exit...");
                 for (View view : viewList) {
                     view.genView();
+
                 }
+                System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
+                System.out.flush();
 
 
                 // 사용자가 'x' 입력 시 프로그램 종료

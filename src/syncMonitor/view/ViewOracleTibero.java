@@ -32,8 +32,7 @@ public class ViewOracleTibero implements View {
     @Override
     public void genView() {
         try {
-            System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
-            System.out.flush();
+
             Integer tiberoPrsLct = Integer.parseInt(tiberoOnly.doGetPrs_lct());
             Integer tiberoTsn = Integer.parseInt(tiberoOnly.doGetTsn());
             Integer oraclePrsLct = Integer.parseInt(oracleOnly.doGetPrsLct());
