@@ -1,4 +1,4 @@
-package view;
+package syncMonitor.view;
 
 import syncMonitor.config.wrapper.DbConfig.TiberoConfig;
 import syncMonitor.query.Dblink;
