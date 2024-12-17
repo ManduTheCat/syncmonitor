@@ -10,13 +10,30 @@ import java.util.List;
 
 // 노멀에서 전달받고 dto 만들면서 유일 새션 생성
 public class ViewOracleTibero implements View {
-
+    private  final int GRAPH_WIDTH = 5;
     private final List<TopologyDto> topologyDtos;
+
+    private  final String RESET = "\u001B[0m";
+    private final String RED = "\u001B[31m";
+    private final String GREEN = "\u001B[32m";
+    private final String YELLOW = "\u001B[33m";
+    private  final int WARNING_THRESHOLD = 10;
+    private  final Double SHRINK_SIZE = 0.00000001;
 
     public ViewOracleTibero(List<TopologyDto> topologyDtos) {
         this.topologyDtos = topologyDtos;
     }
-
+    private  String createGraphLine(int value, int maxValue) {
+        StringBuilder graph = new StringBuilder();
+        int graphLength = (int) ((value / (double) maxValue) * GRAPH_WIDTH * SHRINK_SIZE );
+        System.out.println(graphLength);
+        for (int i = 0; i < graphLength; i++) {
+            graph.append("|");
+        }
+        graph.append(" ").append(value);
+        System.out.println(graph.length());
+        return graph.toString();
+    }
     @Override
     public void genView() {
         try {
@@ -37,6 +54,7 @@ public class ViewOracleTibero implements View {
 
             for (TopologyDto topology : topologyDtos) {
                 // DTO에서 객체 가져오기
+;
                 TiberoOnly tiberoOnly = topology.getTiberoOnly();
                 OracleOnly oracleOnly = topology.getOracleOnly();
 
@@ -51,11 +69,15 @@ public class ViewOracleTibero implements View {
                 asciiTable.addRule();
                 asciiTable.addRow(topology.getName(), "O->T", oracleSCN, tiberoPrsLct, (oracleSCN - tiberoPrsLct));
                 asciiTable.addRule();
+
+                System.out.println(topology.getName() + "delay : "+ createGraphLine((oracleSCN - tiberoPrsLct), 100000000));
+                System.out.println(topology.getName()+": "+ createGraphLine((tiberoPrsLct - oraclePrsLct), 1));
             }
 
             // 테이블 출력
             asciiTable.setTextAlignment(TextAlignment.CENTER);
             System.out.println(asciiTable.render(80));
+
 
         } catch (Exception e) {
             e.printStackTrace();
