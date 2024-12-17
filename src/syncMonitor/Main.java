@@ -40,10 +40,11 @@ public class Main {
             System.out.println("\u001B[H\u001B[2J");
             System.out.flush();
             while (true) {
+                System.out.println("Press 'x' to exit...\n");
                 for (View view : viewList) {
                     view.genView();
                 }
-                System.out.println("Press 'x' to exit...\n");
+
 
                 // 사용자가 'x' 입력 시 프로그램 종료
                 if (System.in.available() > 0) {
