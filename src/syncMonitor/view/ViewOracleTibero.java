@@ -26,17 +26,15 @@ public class ViewOracleTibero implements View {
 
 
     @Override
-    public void doPrint() {
+    public void genView() {
 
         try {
-            for (int i = 0; i < 100000000; i++) { // 제한두는 이유?
                 java.util.Date d = new java.util.Date();
                 Integer tiberoPrsLct = Integer.parseInt(tiberoOnly.doGetPrs_lct());
                 Integer tiberoTsn = Integer.parseInt(tiberoOnly.doGetTsn());
                 Integer oraclePrsLct = Integer.parseInt(oracleOnly.doGetPrsLct());
                 Integer oracleSCN = Integer.parseInt(oracleOnly.doGetSCN());
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
-
                 System.out.println("======================================");
                 System.out.println("Prosync Monitor for 4");
                 System.out.println("======================================");
@@ -63,8 +61,6 @@ public class ViewOracleTibero implements View {
                 System.out.println(" ");
                 System.out.println(" ");
                 System.out.println(" ");
-                Thread.sleep(5000);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

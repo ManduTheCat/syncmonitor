@@ -1,5 +1,5 @@
 package syncMonitor.view;
 
 public interface View {
-    void doPrint();
+    void genView();
 }
