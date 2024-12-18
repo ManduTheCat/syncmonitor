@@ -7,7 +7,7 @@ oracle 과 tibero 데이터 베이스 세션을 통해 prs_lct, scn, tsn 비교 
 $  sh run_monitor.sh 
 ```
 ### 동작 화면
-
+![결과 화면](./doc/res.png)
 
 ## 설정방법
 config.yml 수정하여 설정 변경가능
