@@ -60,7 +60,7 @@ public class ViewOracleTibero implements View {
                 Integer oracleSCN = Integer.parseInt(oracleOnly.doGetSCN());
 
                 // 테이블 행 추가
-                asciiTable.addRow(topology.getName(), "T->O", tiberoTsn, oraclePrsLct, (tiberoPrsLct - oraclePrsLct));
+                asciiTable.addRow(topology.getName(), "T->O", tiberoTsn, oraclePrsLct, (tiberoTsn - oraclePrsLct));
                 asciiTable.addRule();
                 asciiTable.addRow(topology.getName(), "O->T", oracleSCN, tiberoPrsLct, (oracleSCN - tiberoPrsLct));
                 asciiTable.addRule();
