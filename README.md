@@ -79,5 +79,5 @@ topology:
 
 ```
 ## 기능 
-* tibero 에 설정된 T to O 디비링크 통해 TSN 과 시간 조회기능
-* Oracle 연결 지원예정
+* oracle 과 tibero 데이터 베이스 세션을 통해 prs_lct, scn, tsn 비교
+* oracle tibero topology 설정 추가해 수행시 동적 화면 변화
