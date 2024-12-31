@@ -3,6 +3,7 @@ package syncMonitor.mode;
 import syncMonitor.config.wrapper.DbConfig.OracleConfig;
 import syncMonitor.config.wrapper.DbConfig.TiberoConfig;
 import syncMonitor.config.wrapper.DbConfig.TopologyConfig;
+import syncMonitor.config.wrapper.MonitorConfig;
 import syncMonitor.session.SyncMonitorSessionOracle;
 import syncMonitor.session.SyncMonitorSessionTibero;
 import syncMonitor.view.TopologyDto;
@@ -12,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Normal {
-    private ViewOracleTibero viewOracleTibero;
+    private final ViewOracleTibero viewOracleTibero;
 
-    public Normal(List<TopologyConfig> topologyConfigs) {
+    public Normal(List<TopologyConfig> topologyConfigs, MonitorConfig monitorConfig) {
         // TopologyDto 리스트 준비
-        List<TopologyDto> topologyDtos = new ArrayList<>();
+        final List<TopologyDto> topologyDtos = new ArrayList<>();
 
         for (TopologyConfig config : topologyConfigs) {
             // 설정 가져오기
@@ -33,7 +34,7 @@ public class Normal {
         }
 
         // ViewOracleTibero 객체 생성 (DTO 리스트 전달)
-        this.viewOracleTibero = new ViewOracleTibero(topologyDtos);
+        this.viewOracleTibero = new ViewOracleTibero(topologyDtos, monitorConfig);
     }
 
     public ViewOracleTibero getViewOracleTibero() {

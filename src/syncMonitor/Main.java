@@ -13,23 +13,24 @@ import syncMonitor.view.ViewOracleTibero;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Main {
 
     public static void main(String[] args) {
         YmlConfigWrapper config = new YmlConfigWrapper();
-        List<TopologyConfig> topologyConfigList = config.getTiberoConfig();
         MonitorConfig monitorConfig = config.getMonitorConfig();
+        List<TopologyConfig> topologyConfigList = config.getTiberoConfig();
         ArrayList<TopologyConfig> normalList = new ArrayList<>();
         for (TopologyConfig topologyConfig : topologyConfigList) {
             if ("normal".equalsIgnoreCase(topologyConfig.getMode())) {
                 System.out.println("topology name : " + topologyConfig.getName());
-                System.out.println("mode: normal");
+                System.out.println("mode: " + topologyConfig.getMode());
                 normalList.add(topologyConfig);
             }
         }
-        Normal normalModeHandler = new Normal(normalList);
+        Normal normalModeHandler = new Normal(normalList, monitorConfig);
+        // gem view
         ViewOracleTibero viewOracleTibero = normalModeHandler.getViewOracleTibero();
-
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("\u001B[H\u001B[2J"); // 화면 clear
             System.out.println("\n[INFO] Program terminated by user.");

@@ -10,9 +10,6 @@ import syncMonitor.session.SyncMonitorSessionTibero;
 public class TopologyDto {
     private final SyncMonitorSessionOracle oracleSession;
     private final OracleConfig oracleConfig;
-
-
-
     private final SyncMonitorSessionTibero tiberoSession;
     private final TiberoConfig tiberoConfig;
 

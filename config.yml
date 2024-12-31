@@ -1,5 +1,5 @@
 monitor:
-  mode: wide
+  size: wide
 topology:
   - name: sync1
     mode: normal
