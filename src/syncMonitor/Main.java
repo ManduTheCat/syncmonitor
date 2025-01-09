@@ -58,6 +58,7 @@ public class Main {
                     }
                 }
                 // 짧은 대기 시간 추가 (0.5초)
+                //todo 1초로 변경
                 Thread.sleep(500);
             }
         } catch (Exception e) {
