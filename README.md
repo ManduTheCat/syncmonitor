@@ -18,9 +18,9 @@ $  sh run_monitor.sh
 - TSN_GAP : SOURCE TSN , TARGET TSN 간 차이, 값 클수록 SOURCE, TARGET 간 동기화 느림 의미
 - curr time : 현제 시간
 - oracle last commit : oracel 마지막 동기화 시간
-  - 티베로 에 보네는 쿼리: select time from [티베로 user: prs_lct 테이블 소유 스키마].prs_lct
+  - 티베로 에 보네는 쿼리: `select time from [티베로 user: prs_lct 테이블 소유 스키마].prs_lct`
 - tibero last commit : tibero 마지막 동기화 시간
-  - 티베로 에 보네는 쿼리:select time from  [오라클 user: prs_lct 테이블 소유 스키마].prs_lct
+  - 티베로 에 보네는 쿼리:`select time from  [오라클 user: prs_lct 테이블 소유 스키마].prs_lct`
 
 
  ### 동작 화면
