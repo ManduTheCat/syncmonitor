@@ -1,5 +1,10 @@
 package syncMonitor.config.wrapper.DbConfig;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class TiberoConfig implements DbConfig {
     private String ip;
     private String port;
@@ -13,76 +18,19 @@ public class TiberoConfig implements DbConfig {
     // Getter and Setter for all fields
 
     @Override
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    @Override
-    public String getPort() {
-        return port;
-    }
-
-    public void setPort(String port) {
-        this.port = port;
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Override
-    public String getPwd() {
-        return pwd;
-    }
-
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
-    }
-
-    @Override
     public String getDbLink() {
         return dbLink;
-    }
-
-    public void setDbLink(String dbLink) {
-        this.dbLink = dbLink;
     }
 
     @Override
     public String getUser() {
         return user1;
     }
-
-    public void setUser1(String user1) {
-        this.user1 = user1;
-    }
-
     @Override
-    public String getDblinkUser() {
-        return user2;
+    public String getDblinkUser()  {
+        return dbLink;
     }
 
-    public void setUser2(String user2) {
-        this.user2 = user2;
-    }
-
-    @Override
-    public String getDbSid() {
-        return dbSid;
-    }
-
-    public void setDbSid(String dbSid) {
-        this.dbSid = dbSid;
-    }
 
     @Override
     public String toString() {

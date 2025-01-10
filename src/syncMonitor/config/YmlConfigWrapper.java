@@ -2,8 +2,6 @@ package syncMonitor.config;
 
 import org.yaml.snakeyaml.Yaml;
 import syncMonitor.config.wrapper.ConfigWrapper;
-import syncMonitor.config.wrapper.DbConfig.OracleConfig;
-import syncMonitor.config.wrapper.DbConfig.TiberoConfig;
 import syncMonitor.config.wrapper.DbConfig.TopologyConfig;
 import syncMonitor.config.wrapper.MonitorConfig;
 

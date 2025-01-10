@@ -1,5 +1,6 @@
 package syncMonitor.mode;
 
+import lombok.Getter;
 import syncMonitor.config.wrapper.DbConfig.OracleConfig;
 import syncMonitor.config.wrapper.DbConfig.TiberoConfig;
 import syncMonitor.config.wrapper.DbConfig.TopologyConfig;
@@ -11,8 +12,9 @@ import syncMonitor.view.ViewOracleTibero;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class Normal {
-    private ViewOracleTibero viewOracleTibero;
+    private final ViewOracleTibero viewOracleTibero;
 
     public Normal(List<TopologyConfig> topologyConfigs) {
         // TopologyDto 리스트 준비
@@ -20,10 +22,12 @@ public class Normal {
 
         for (TopologyConfig config : topologyConfigs) {
             // 설정 가져오기
-            TiberoConfig tiberoConfig = (TiberoConfig) config.getTiberoConfig();
-            OracleConfig oracleConfig = (OracleConfig) config.getOracleConfig();
+            //TiberoConfig tiberoConfig = (TiberoConfig) config.getTiberoConfig();
+            TiberoConfig tiberoConfig = null;
+            //OracleConfig oracleConfig = (OracleConfig) config.getOracleConfig();           TiberoConfig tiberoConfig = (TiberoConfig) config.getTiberoConfig();
+            OracleConfig oracleConfig = null;
 
-            // 세션 생성
+            // 세션 가져오기
             SyncMonitorSessionTibero tiberoSession = SyncMonitorSessionTibero.getSyncMonitorSession(tiberoConfig);
             SyncMonitorSessionOracle oracleSession = SyncMonitorSessionOracle.getSyncMonitorSession(oracleConfig);
 
@@ -36,7 +40,4 @@ public class Normal {
         this.viewOracleTibero = new ViewOracleTibero(topologyDtos);
     }
 
-    public ViewOracleTibero getViewOracleTibero() {
-        return viewOracleTibero;
-    }
 }

@@ -2,6 +2,7 @@ package syncMonitor.config.wrapper.DbConfig;
 
 import java.io.IOError;
 
+
 public interface DbConfig  {
     String getIp();
     String getId();

@@ -21,13 +21,15 @@ public class Main {
         MonitorConfig monitorConfig = config.getMonitorConfig();
         ArrayList<TopologyConfig> normalList = new ArrayList<>();
         for (TopologyConfig topologyConfig : topologyConfigList) {
-            if ("normal".equalsIgnoreCase(topologyConfig.getMode())) {
-                System.out.println("topology name : " + topologyConfig.getName());
-                System.out.println("mode: normal");
-                normalList.add(topologyConfig);
-            }
+            System.out.println("topology name : " + topologyConfig.getName());
+            System.out.println("mode: normal");
+            normalList.add(topologyConfig);
+
         }
         Normal normalModeHandler = new Normal(normalList);
+
+
+        /////////////////////
         ViewOracleTibero viewOracleTibero = normalModeHandler.getViewOracleTibero();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -63,9 +65,8 @@ public class Main {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
-            for( TopologyDto topologyDto :viewOracleTibero.getTopologyDtos()){
+        } finally {
+            for (TopologyDto topologyDto : viewOracleTibero.getTopologyDtos()) {
                 topologyDto.getOracleSession().disconnect();
                 topologyDto.getTiberoSession().disconnect();
 
