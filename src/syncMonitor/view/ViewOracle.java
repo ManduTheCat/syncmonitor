@@ -1,6 +1,6 @@
 package syncMonitor.view;
 
-import syncMonitor.config.wrapper.DbConfig.OracleConfig;
+import syncMonitor.config.wrapper.DbConfig.DbConfig;
 import syncMonitor.session.SyncMonitorSession;
 
 import java.text.SimpleDateFormat;
@@ -11,13 +11,12 @@ public class ViewOracle implements View{
 
 
 
-    public ViewOracle(SyncMonitorSession session, OracleConfig oracleConfig) {
+    public ViewOracle(SyncMonitorSession session, DbConfig oracleConfig) {
         this.session = session;
 
     }
-
     @Override
-    public void genView() {
+    public void runView() {
 
         try {
             for (int i = 0; i < 100000000; i++) { // 제한두는 이유?

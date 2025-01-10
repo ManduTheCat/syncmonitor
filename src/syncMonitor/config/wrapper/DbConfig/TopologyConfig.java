@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class TopologyConfig {
     private String name;
-    private DbConfig source;
-    private DbConfig target;
+    private SourceConfig source;
+    private TargetConfig target;
 
 }

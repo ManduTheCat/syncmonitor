@@ -1,7 +1,6 @@
 package syncMonitor.session;
 
 import syncMonitor.config.wrapper.DbConfig.DbConfig;
-import syncMonitor.config.wrapper.DbConfig.OracleConfig;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -32,7 +31,7 @@ public class SyncMonitorSessionOracle extends SyncMonitorSession {
             Class.forName(DB_DRV);
             System.out.println("Driver loaded successfully.");
             System.out.println("Connecting to DB...");
-            conn = DriverManager.getConnection(DB_URL, oracleConfig.getId(), oracleConfig.getPwd());
+            conn = DriverManager.getConnection(DB_URL, oracleConfig.getConnId(), oracleConfig.getConnPwd());
             System.out.println("Oracle Connect Success");
         } catch (Exception ex) {
             System.out.println("Connection failed: " + ex.getMessage());

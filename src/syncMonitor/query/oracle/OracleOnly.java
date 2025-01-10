@@ -1,7 +1,5 @@
 package syncMonitor.query.oracle;
 
-import syncMonitor.config.wrapper.DbConfig.OracleConfig;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

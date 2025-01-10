@@ -12,11 +12,15 @@ public class TopologyFactory {
     private DbConfig sourceConfig;
     private DbConfig targetConfig;
 
-    public TopologyFactory(SyncMonitorSession sourceSession, SyncMonitorSession targetSession,
-                           DbConfig sourceConfig, DbConfig targetConfig) {
+    public TopologyFactory() {
         this.sourceSession = sourceSession;
         this.targetSession = targetSession;
         this.sourceConfig = sourceConfig;
         this.targetConfig = targetConfig;
+    }
+    public Topology genToplogy(SyncMonitorSession sourceSession, SyncMonitorSession targetSession,
+                               DbConfig sourceConfig, DbConfig targetConfig){
+        Topology topology = new Topology();
+        return topology;
     }
 }

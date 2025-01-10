@@ -26,7 +26,7 @@ public class ViewTibero implements View{
     }
 
     @Override
-    public void genView() {
+    public void runView() {
 
         try {
             for (int i = 0; i < 100000000; i++) { // 제한두는 이유?

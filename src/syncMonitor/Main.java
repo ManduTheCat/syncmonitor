@@ -4,11 +4,9 @@ import syncMonitor.config.YmlConfigWrapper;
 import syncMonitor.config.wrapper.DbConfig.TopologyConfig;
 import syncMonitor.config.wrapper.MonitorConfig;
 import syncMonitor.mode.Normal;
-import syncMonitor.mode.OnlyTibero;
-import syncMonitor.session.SyncMonitorSession;
-import syncMonitor.view.TopologyDto;
+import syncMonitor.topology.Topology;
+import syncMonitor.topology.TopologyFactory;
 import syncMonitor.view.View;
-import syncMonitor.view.ViewOracleTibero;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,18 +17,19 @@ public class Main {
         YmlConfigWrapper config = new YmlConfigWrapper();
         List<TopologyConfig> topologyConfigList = config.getTiberoConfig();
         MonitorConfig monitorConfig = config.getMonitorConfig();
-        ArrayList<TopologyConfig> normalList = new ArrayList<>();
+        ArrayList<Topology> normalList = new ArrayList<>();
+        TopologyFactory topologyFactory = new TopologyFactory();
         for (TopologyConfig topologyConfig : topologyConfigList) {
             System.out.println("topology name : " + topologyConfig.getName());
             System.out.println("mode: normal");
-            normalList.add(topologyConfig);
+            normalList.add(topologyFactory.genToplogy(null, null,null, null));// 팩토리로 생성한걸로 바꿔야합니다.
 
         }
-        Normal normalModeHandler = new Normal(normalList);
+        //Normal normalModeHandler = new Normal(normalList);
 
 
         /////////////////////
-        ViewOracleTibero viewOracleTibero = normalModeHandler.getViewOracleTibero();
+        View view = null;
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("\u001B[H\u001B[2J"); // 화면 clear
@@ -44,8 +43,7 @@ public class Main {
                 System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
                 System.out.flush();
                 System.out.println("press 'ctl + c' to exit...");
-                assert viewOracleTibero != null;
-                viewOracleTibero.genView();
+
                 System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
                 System.out.flush();
 
@@ -66,9 +64,8 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            for (TopologyDto topologyDto : viewOracleTibero.getTopologyDtos()) {
-                topologyDto.getOracleSession().disconnect();
-                topologyDto.getTiberoSession().disconnect();
+            for (Topology topologyDto :normalList) {
+                //토플러지 객체에서 세션종료
 
             }
         }
