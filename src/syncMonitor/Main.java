@@ -17,12 +17,11 @@ public class Main {
         YmlConfigWrapper config = new YmlConfigWrapper();
         List<TopologyConfig> topologyConfigList = config.getTiberoConfig();
         MonitorConfig monitorConfig = config.getMonitorConfig();
-        ArrayList<Topology> normalList = new ArrayList<>();
         TopologyFactory topologyFactory = new TopologyFactory();
         for (TopologyConfig topologyConfig : topologyConfigList) {
             System.out.println("topology name : " + topologyConfig.getName());
             System.out.println("mode: normal");
-            normalList.add(topologyFactory.genToplogy(null, null,null, null));// 팩토리로 생성한걸로 바꿔야합니다.
+            topologyFactory.genToplogy(null, null);// 팩토리로 생성한걸로 바꿔야합니다.
 
         }
         //Normal normalModeHandler = new Normal(normalList);
@@ -64,10 +63,10 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            for (Topology topologyDto :normalList) {
-                //토플러지 객체에서 세션종료
-
-            }
+//            for (Topology topologyDto :) {
+//                //토플러지 객체에서 세션종료
+//
+//            }
         }
     }
 

@@ -1,7 +1,6 @@
 package syncMonitor.session;
 
 import syncMonitor.config.wrapper.DbConfig.DbConfig;
-import syncMonitor.config.wrapper.DbConfig.TiberoConfig;
 
 import java.sql.*;
 

@@ -8,7 +8,6 @@ import lombok.ToString;
 @Getter
 @ToString
 public class TargetConfig implements DbConfig{
-    // Getters and Setters
     private String dbType;
     private String ip;
     private int port;

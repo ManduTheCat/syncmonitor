@@ -1,7 +1,5 @@
 package syncMonitor.query.tibero;
 
-import syncMonitor.config.wrapper.DbConfig.TiberoConfig;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

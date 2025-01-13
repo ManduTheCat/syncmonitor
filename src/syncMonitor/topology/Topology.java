@@ -1,19 +1,16 @@
 package syncMonitor.topology;
 
+import lombok.Getter;
 import syncMonitor.config.wrapper.DbConfig.DbConfig;
-import syncMonitor.session.SyncMonitorSession;
 
+// 설정 할때(최초생성) 빼고는 변경되서는 안되는 정보들
+@Getter
 public class Topology {
-    SyncMonitorSession sourceSession;
-    SyncMonitorSession targetSession;
-    DbConfig SourceConfig;
-    DbConfig TargetConfig;
-    String sourceQuery;
-    String targetQuery;
+    private final DbDto source;
+    private final DbDto target;
 
-
-    public String getSourceTsnOrScn(){
-        return null;
+    public Topology(DbDto source, DbDto target) {
+        this.source = source;
+        this.target = target;
     }
-
 }
