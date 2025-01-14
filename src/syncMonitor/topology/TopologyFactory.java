@@ -16,7 +16,7 @@ public class TopologyFactory {
     // 여러개의 토플러지가 가능해야하니 리스트로 받는다.
 
     private static final String SOURCE_KEY = "source";
-    private static final String TARGET_KEY = "source";
+    private static final String TARGET_KEY = "target";
 
     public List<Topology> genToplogy(List<TopologyConfig> topologyConfigs, Map<String,SyncMonitorSession> connectionMap){
         List<Topology> generatedTopologyList = new ArrayList<>();;
