@@ -24,8 +24,8 @@ public class TopologyFactory {
         for(TopologyConfig topologyConfig: topologyConfigs){
             Map<String, String> query = findQuery(topologyConfig);
             Map<String, SyncMonitorSession> session = findSession(topologyConfig, connectionMap);
-            DbDto source = new DbDto(session.get("source"), query.get("soruce"));
-            DbDto target = new DbDto(session.get("target"), query.get("target"));
+            DbDto source = new DbDto(session.get(SOURCE_KEY), query.get(SOURCE_KEY));
+            DbDto target = new DbDto(session.get(TARGET_KEY), query.get(TARGET_KEY));
             generatedTopologyList.add(new Topology(source, target));
         }
 
