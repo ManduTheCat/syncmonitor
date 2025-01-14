@@ -3,35 +3,18 @@ monitor:
 topology:
   - name: sync1
     source:
-      db: tibero
+      dbType: tibero
       ip: 192.168.1.187
       port: 4628
-      id: tibero
-      pwd: tmax
-      user: jsh_ott
+      connId: tibero
+      connPwd: tmax
+      proSyncUser: jsh_ott
       dbSid: tibero7_2
     target:
-      db: oracle
+      dbType: oracle
       ip: 192.168.1.188
       port: 1525
-      id: JSH_OTT
-      pwd: jsh
-      user: jsh_tto
-      dbSid: oraclesb
-  - name: sync2
-    source:
-      db: tibero
-      ip: 192.168.1.187
-      port: 4628
-      id: tibero
-      pwd: tmax
-      user: jsh_ott
-      dbSid: tibero7_2
-    target:
-      db: oracle
-      ip: 192.168.1.188
-      port: 1525
-      id: JSH_OTT
-      pwd: jsh
-      user: jsh_tto
+      connId: JSH_OTT
+      connPwd: jsh
+      proSyncUser: jsh_tto
       dbSid: oraclesb

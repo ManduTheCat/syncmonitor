@@ -1,9 +1,5 @@
 package syncMonitor.view;
 
-import syncMonitor.query.Dblink;
-import syncMonitor.query.oracle.DbLinkOracleToTibero;
-import syncMonitor.query.tibero.DbLinkTiberoToOracle;
-import syncMonitor.session.SyncMonitorSession;
 
 import java.sql.Connection;
 import java.text.SimpleDateFormat;

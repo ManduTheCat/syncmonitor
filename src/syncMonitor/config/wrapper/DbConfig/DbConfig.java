@@ -5,7 +5,7 @@ package syncMonitor.config.wrapper.DbConfig;
 public interface DbConfig  {
     String getDbType();
     String getIp();
-    String getPort();
+    int getPort();
     String getConnId();
     String getConnPwd();
     String getProSyncUser();

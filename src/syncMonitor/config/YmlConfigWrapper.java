@@ -1,5 +1,6 @@
 package syncMonitor.config;
 
+import lombok.Getter;
 import org.yaml.snakeyaml.Yaml;
 import syncMonitor.config.wrapper.ConfigWrapper;
 import syncMonitor.config.wrapper.DbConfig.TopologyConfig;
@@ -45,7 +46,7 @@ public class YmlConfigWrapper {
         }
     }
 
-    public List<TopologyConfig> getTiberoConfig() {
+    public List<TopologyConfig> getTopologyConfig() {
         return configWrapper.getTopology();
     }
 
