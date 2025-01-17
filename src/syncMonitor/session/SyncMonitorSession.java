@@ -10,7 +10,7 @@ public interface SyncMonitorSession {
     String getDbDRV();
     String getBaseURL();
 
-    //모든 세션의 공통된 부분임으로 default
+    //모든 세션의 공통된 부분임 으로 default 생성 구현체에서 사용가능
     default Connection genSyncMonitorSessionConnection(DbConfig config){
         Connection conn = null;
         String DB_DRV = getDbDRV();

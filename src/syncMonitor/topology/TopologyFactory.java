@@ -23,10 +23,12 @@ public class TopologyFactory {
 
         for(TopologyConfig topologyConfig: topologyConfigs){
             Map<String, String> query = findQuery(topologyConfig);
+
+            // 여기에 토플러지 자체를 넣어서 하기엔 미리 체크하는 부분 때문에 안됨
             Map<String, SyncMonitorSession> session = findSession(topologyConfig, connectionMap);
-            DbDto source = new DbDto(session.get(SOURCE_KEY), query.get(SOURCE_KEY));// 쿼리와 세션 할당
+            DbDto source = new DbDto(session.get(SOURCE_KEY), query.get(SOURCE_KEY));
             DbDto target = new DbDto(session.get(TARGET_KEY), query.get(TARGET_KEY));
-            generatedTopologyList.add(new Topology(source, target));
+            generatedTopologyList.add(new Topology(source, target, topologyConfig));
         }
 
         // 쿼리 판단해서 할당, 세션 검사해서 할당
@@ -38,6 +40,7 @@ public class TopologyFactory {
 
         String sourceQuery="";
         String targetQuery="";
+        String lastCommitTimeQuery="";
         // check source
         if("ORACLE".equalsIgnoreCase(topologyConfig.getSource().getDbType())){
             sourceQuery = QueryTsnOrSCN.getOracle(topologyConfig.getSource());
@@ -53,8 +56,17 @@ public class TopologyFactory {
         }else if ("TIBERO".equalsIgnoreCase(topologyConfig.getTarget().getDbType())){
             targetQuery = QueryPrsLct.getTibero(topologyConfig.getTarget());
         }
+        // time target 소스 또한 타겟의 마지막 커밋 타임 알고 있다.
+        if("ORACLE".equalsIgnoreCase(topologyConfig.getTarget().getDbType())){
+            lastCommitTimeQuery = QueryPrsLct.getLastCommitTime(topologyConfig.getTarget());
+
+        }else if ("TIBERO".equalsIgnoreCase(topologyConfig.getTarget().getDbType())){
+            lastCommitTimeQuery = QueryPrsLct.getLastCommitTime(topologyConfig.getTarget());
+        }
 
         Map<String, String> res = new HashMap<>();
+
+        //todo 해당 부분 널일 경우 처리 need
         if(!sourceQuery.isEmpty()){
             res.put(SOURCE_KEY, sourceQuery);
         }

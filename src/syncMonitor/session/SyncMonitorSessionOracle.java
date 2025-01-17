@@ -4,8 +4,6 @@ import lombok.Getter;
 import syncMonitor.config.wrapper.DbConfig.DbConfig;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 //팩토리에서 이객체를 생성함으로서 새로운 세션을 만들수 있다
 public class SyncMonitorSessionOracle implements SyncMonitorSession {

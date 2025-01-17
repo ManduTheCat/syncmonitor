@@ -12,9 +12,11 @@ import java.util.Map;
 // 단일성보장, 추후 멀티쓰래딩 고려해 synchronizedMap 사용
 public class SessionManager {
 
+    @Getter
     private final Map<String, SyncMonitorSession> connetcionMap;
 
     // static final getter
+    @Getter
     private static final SessionManager instance = new SessionManager();
 
     private SessionManager() {
@@ -106,11 +108,4 @@ public class SessionManager {
         }
     }
 
-    public Map<String, SyncMonitorSession> getConnetcionMap() {
-        return connetcionMap;
-    }
-
-    public static SessionManager getInstance() {
-        return instance;
-    }
 }

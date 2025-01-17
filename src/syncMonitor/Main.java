@@ -40,7 +40,7 @@ public class Main {
 
 
         /////////////////////
-        View view = null;
+        View view = new View(topologies);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("\u001B[H\u001B[2J"); // 화면 clear
@@ -50,28 +50,30 @@ public class Main {
         try {
             System.out.println("\u001B[H\u001B[2J"); // 화면 clear
             System.out.flush();
-            while (true) {
-                System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
-                System.out.flush();
-                System.out.println("press 'ctl + c' to exit...");
+            view.genView();
 
-                System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
-                System.out.flush();
-
-                if (System.in.available() > 0) {
-                    char userInput = (char) System.in.read();
-                    if (userInput == 'x' || userInput == 'X') {
-                        System.out.println("[INFO] Exiting program...");
-
-                        System.out.println("\u001B[H\u001B[2J");
-                        System.out.flush();
-                        return; // main 종료
-                    }
-                }
-                // 짧은 대기 시간 추가 (0.5초)
-                //todo 1초로 변경
-                Thread.sleep(500);
-            }
+//            while (true) {
+//                System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
+//                System.out.flush();
+//                System.out.println("press 'ctl + c' to exit...");
+//
+//                System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
+//                System.out.flush();
+//
+//                if (System.in.available() > 0) {
+//                    char userInput = (char) System.in.read();
+//                    if (userInput == 'x' || userInput == 'X') {
+//                        System.out.println("[INFO] Exiting program...");
+//
+//                        System.out.println("\u001B[H\u001B[2J");
+//                        System.out.flush();
+//                        return; // main 종료
+//                    }
+//                }
+//                // 짧은 대기 시간 추가 (0.5초)
+//                //todo 1초로 변경
+//                Thread.sleep(500);
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

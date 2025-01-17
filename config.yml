@@ -14,7 +14,7 @@ topology:
       dbType: tibero
       ip: 192.168.1.187
       port: 4628
-      connId: tibero
-      connPwd: tmax
+      connId: sys
+      connPwd: tibero
       proSyncUser: jsh_ott
       dbSid: tibero7_2
