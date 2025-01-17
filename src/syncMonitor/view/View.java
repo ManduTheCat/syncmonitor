@@ -1,5 +1,10 @@
 package syncMonitor.view;
 
-public interface View {
-    void runView();
+
+import java.sql.Connection;
+import java.text.SimpleDateFormat;
+
+public class View{
+
+
 }

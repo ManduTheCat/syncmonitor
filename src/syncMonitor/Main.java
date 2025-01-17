@@ -5,8 +5,8 @@ import syncMonitor.config.wrapper.DbConfig.TopologyConfig;
 import syncMonitor.config.wrapper.MonitorConfig;
 import syncMonitor.session.SessionManager;
 import syncMonitor.session.SyncMonitorSession;
+import syncMonitor.topology.Topology;
 import syncMonitor.topology.TopologyFactory;
-import syncMonitor.view.View;
 
 import java.util.List;
 import java.util.Map;
@@ -17,16 +17,24 @@ public class Main {
         YmlConfigWrapper config = new YmlConfigWrapper();
         System.out.println(config);
         List<TopologyConfig> topologyConfigList = config.getConfigWrapper().getTopology();
-        //MonitorConfig monitorConfig = config.getConfigWrapper().getMonitor();
+        MonitorConfig monitorConfig = config.getConfigWrapper().getMonitor();
         TopologyFactory topologyFactory = new TopologyFactory();
-        // 메니저로 커넥션
+        // 메니저로 커넥션 수행 및 map 으로 관리
         SessionManager sessionManager = SessionManager.getInstance();
         sessionManager.addTopologySession(topologyConfigList);
+        // 맵으로 만들어 토플러지 팩토리에 전달후 전체 토플러지 리스트 생성
         Map<String, SyncMonitorSession> connetcionMap = sessionManager.getConnetcionMap();
-        connetcionMap.values().stream().forEach(SyncMonitorSession::getConn);
+        List<Topology> topologies = topologyFactory.genToplogy(topologyConfigList, connetcionMap);
 
-
-        topologyFactory.genToplogy(topologyConfigList, connetcionMap);// 팩토리로 생성한걸로 바꿔야합니다.
+        // 커낵션 매니저가 관리하는 객체 조회
+        for(SyncMonitorSession syncMonitorSession :connetcionMap.values()){
+            System.out.println(syncMonitorSession.getConn());
+        }
+        for(Topology topology: topologies){
+            System.out.println();
+            System.out.println(topology.getSource().getQuery());
+            System.out.println(topology.getTarget().getQuery());
+        }
 
 
         //Normal normalModeHandler = new Normal(normalList);
@@ -35,44 +43,44 @@ public class Main {
         /////////////////////
         View view = null;
 
-//        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-//            System.out.println("\u001B[H\u001B[2J"); // 화면 clear
-//            System.out.println("\n[INFO] Program terminated by user.");
-//        }));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("\u001B[H\u001B[2J"); // 화면 clear
+            System.out.println("\n[INFO] Program terminated by user.");
+        }));
+
+        try {
+            System.out.println("\u001B[H\u001B[2J"); // 화면 clear
+            System.out.flush();
+            while (true) {
+                System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
+                System.out.flush();
+                System.out.println("press 'ctl + c' to exit...");
+
+                System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
+                System.out.flush();
+
+                if (System.in.available() > 0) {
+                    char userInput = (char) System.in.read();
+                    if (userInput == 'x' || userInput == 'X') {
+                        System.out.println("[INFO] Exiting program...");
+
+                        System.out.println("\u001B[H\u001B[2J");
+                        System.out.flush();
+                        return; // main 종료
+                    }
+                }
+                // 짧은 대기 시간 추가 (0.5초)
+                //todo 1초로 변경
+                Thread.sleep(500);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+//            for (Topology topologyDto :) {
+//                //토플러지 객체에서 세션종료
 //
-//        try {
-//            System.out.println("\u001B[H\u001B[2J"); // 화면 clear
-//            System.out.flush();
-//            while (true) {
-//                System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
-//                System.out.flush();
-//                System.out.println("press 'ctl + c' to exit...");
-//
-//                System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
-//                System.out.flush();
-//
-//                if (System.in.available() > 0) {
-//                    char userInput = (char) System.in.read();
-//                    if (userInput == 'x' || userInput == 'X') {
-//                        System.out.println("[INFO] Exiting program...");
-//
-//                        System.out.println("\u001B[H\u001B[2J");
-//                        System.out.flush();
-//                        return; // main 종료
-//                    }
-//                }
-//                // 짧은 대기 시간 추가 (0.5초)
-//                //todo 1초로 변경
-//                Thread.sleep(500);
 //            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-////            for (Topology topologyDto :) {
-////                //토플러지 객체에서 세션종료
-////
-////            }
-//        }
+        }
     }
 
 }

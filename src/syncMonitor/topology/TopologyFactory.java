@@ -55,8 +55,6 @@ public class TopologyFactory {
         }
 
         Map<String, String> res = new HashMap<>();
-        assert sourceQuery != null;
-        assert targetQuery != null;
         if(!sourceQuery.isEmpty()){
             res.put(SOURCE_KEY, sourceQuery);
         }
@@ -84,10 +82,10 @@ public class TopologyFactory {
         }
 
         Map<String, SyncMonitorSession> res = new HashMap<>();
-        if(sourceSession != null && targetSession.equals(null)){ // ?
-            res.put(SOURCE_KEY, sourceSession);
-            res.put(TARGET_KEY, targetSession);
-        }
+
+        res.put(SOURCE_KEY, sourceSession);
+        res.put(TARGET_KEY, targetSession);
+
         return res;
     }
 
