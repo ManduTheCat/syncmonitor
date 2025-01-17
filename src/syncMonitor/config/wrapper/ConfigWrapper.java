@@ -1,20 +1,17 @@
 package syncMonitor.config.wrapper;
 
-import lombok.Getter;
-import lombok.Setter;
+
 import syncMonitor.config.wrapper.DbConfig.TopologyConfig;
 
 import java.util.List;
 
+
 public class ConfigWrapper {
 
-    public MonitorConfig monitor;
-    public List<TopologyConfig> topology;
 
-    @Override
-    public String toString() {
-        return "ConfigWrapper{monitor='" + monitor + "', topology=" + topology + "}";
-    }
+    private MonitorConfig monitor;
+
+    private List<TopologyConfig> topology;
 
     public MonitorConfig getMonitor() {
         return monitor;
@@ -22,5 +19,13 @@ public class ConfigWrapper {
 
     public List<TopologyConfig> getTopology() {
         return topology;
+    }
+
+    public void setMonitor(MonitorConfig monitor) {
+        this.monitor = monitor;
+    }
+
+    public void setTopology(List<TopologyConfig> topology) {
+        this.topology = topology;
     }
 }

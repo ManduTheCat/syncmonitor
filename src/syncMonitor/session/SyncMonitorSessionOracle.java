@@ -13,10 +13,6 @@ public class SyncMonitorSessionOracle implements SyncMonitorSession {
     private ResultSet rs = null;
     private final Connection conn;
 
-    private final  String DbDRV = "oracle.jdbc.OracleDriver";
-
-    private final  String baseURL = "jdbc:oracle:thin:@";
-
     public SyncMonitorSessionOracle(DbConfig oracleConfig){
         this.conn = this.genSyncMonitorSessionConnection(oracleConfig);
     }
@@ -52,17 +48,19 @@ public class SyncMonitorSessionOracle implements SyncMonitorSession {
         if(conn != null){
             return conn;
         }
-        System.out.println("Connection is null. Ensure the database is accessible");
+        System.out.println("Oracle Connection is null. Ensure the database is accessible");
         return null;
     }
 
     @Override
     public String getBaseURL() {
+        String baseURL = "jdbc:oracle:thin:@";
         return baseURL;
     }
 
     @Override
     public String getDbDRV() {
-        return DbDRV;
+        String dbDRV = "oracle.jdbc.OracleDriver";
+        return dbDRV;
     }
 }

@@ -1,18 +1,20 @@
 package syncMonitor.config;
 
-import lombok.Getter;
+
 import org.yaml.snakeyaml.Yaml;
 import syncMonitor.config.wrapper.ConfigWrapper;
-import syncMonitor.config.wrapper.DbConfig.TopologyConfig;
-import syncMonitor.config.wrapper.MonitorConfig;
+
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.List;
+
 
 public class YmlConfigWrapper {
-    private ConfigWrapper configWrapper; // 최상위 YAML 데이터를 담는 객체
+
+    private final ConfigWrapper configWrapper; // 최상위 YAML 데이터를 담는 객체
+
+
 
     public YmlConfigWrapper() {
         String defaultYmlFileName = "config.yml"; // 기본 YAML 파일 이름
@@ -39,6 +41,7 @@ public class YmlConfigWrapper {
 
             // YAML 파일 읽기 및 매핑
             try (InputStream inputStream = new FileInputStream(ymlFile)) {
+                System.out.println("in");
                 configWrapper = yaml.loadAs(inputStream, ConfigWrapper.class);
             }
         } catch (Exception e) {
@@ -46,11 +49,7 @@ public class YmlConfigWrapper {
         }
     }
 
-    public List<TopologyConfig> getTopologyConfig() {
-        return configWrapper.getTopology();
-    }
-
-    public MonitorConfig getMonitorConfig(){
-        return configWrapper.getMonitor();
+    public ConfigWrapper getConfigWrapper() {
+        return configWrapper;
     }
 }

@@ -15,8 +15,9 @@ public class Main {
 
     public static void main(String[] args) {
         YmlConfigWrapper config = new YmlConfigWrapper();
-        List<TopologyConfig> topologyConfigList = config.getTopologyConfig();
-        MonitorConfig monitorConfig = config.getMonitorConfig();
+        System.out.println(config);
+        List<TopologyConfig> topologyConfigList = config.getConfigWrapper().getTopology();
+        //MonitorConfig monitorConfig = config.getConfigWrapper().getMonitor();
         TopologyFactory topologyFactory = new TopologyFactory();
         // 메니저로 커넥션
         SessionManager sessionManager = SessionManager.getInstance();

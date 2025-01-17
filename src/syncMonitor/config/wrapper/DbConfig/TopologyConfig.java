@@ -1,13 +1,11 @@
 package syncMonitor.config.wrapper.DbConfig;
 
-import lombok.Getter;
-import lombok.Setter;
 
 
 public class TopologyConfig {
-    private String name;
-    private DbConfig source;
-    private DbConfig target;
+    public String name;
+    public SourceConfig source;
+    public TargetConfig target;
 
     public String getName() {
         return name;
@@ -21,7 +19,7 @@ public class TopologyConfig {
         return source;
     }
 
-    public void setSource(DbConfig source) {
+    public void setSource(SourceConfig source) {
         this.source = source;
     }
 
@@ -29,7 +27,7 @@ public class TopologyConfig {
         return target;
     }
 
-    public void setTarget(DbConfig target) {
+    public void setTarget(TargetConfig target) {
         this.target = target;
     }
 }
