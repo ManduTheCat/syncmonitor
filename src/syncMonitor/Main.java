@@ -7,6 +7,7 @@ import syncMonitor.session.SessionManager;
 import syncMonitor.session.SyncMonitorSession;
 import syncMonitor.topology.Topology;
 import syncMonitor.topology.TopologyFactory;
+import syncMonitor.view.View;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class Main {
         Map<String, SyncMonitorSession> connetcionMap = sessionManager.getConnetcionMap();
         List<Topology> topologies = topologyFactory.genToplogy(topologyConfigList, connetcionMap);
 
-        // 커낵션 매니저가 관리하는 객체 조회
+        // 커낵션 매니저가 관리하는 객체 조회 테스트
         for(SyncMonitorSession syncMonitorSession :connetcionMap.values()){
             System.out.println(syncMonitorSession.getConn());
         }
@@ -36,8 +37,6 @@ public class Main {
             System.out.println(topology.getTarget().getQuery());
         }
 
-
-        //Normal normalModeHandler = new Normal(normalList);
 
 
         /////////////////////

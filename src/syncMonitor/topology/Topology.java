@@ -8,8 +8,13 @@ public class Topology {
     private final DbDto source;
     private final DbDto target;
 
-    public Topology(DbDto source, DbDto target) {
+    //팩토리에서만 생성할수 있다 접근 패키지로 관리
+    Topology(DbDto source, DbDto target) {
         this.source = source;
         this.target = target;
+    }
+
+    public String runQuery(){
+        return null;
     }
 }

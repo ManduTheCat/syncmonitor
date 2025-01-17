@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// 이미 연결된 객체를 전달 받는다.
+// 이미 연결된 맵 객체를 전달 받는다.
 // 나중에 세션은 주입 받는 걸로 수정하면 좋을듯
 public class TopologyFactory {
     // 여러개의 토플러지가 가능해야하니 리스트로 받는다.
@@ -24,7 +24,7 @@ public class TopologyFactory {
         for(TopologyConfig topologyConfig: topologyConfigs){
             Map<String, String> query = findQuery(topologyConfig);
             Map<String, SyncMonitorSession> session = findSession(topologyConfig, connectionMap);
-            DbDto source = new DbDto(session.get(SOURCE_KEY), query.get(SOURCE_KEY));
+            DbDto source = new DbDto(session.get(SOURCE_KEY), query.get(SOURCE_KEY));// 쿼리와 세션 할당
             DbDto target = new DbDto(session.get(TARGET_KEY), query.get(TARGET_KEY));
             generatedTopologyList.add(new Topology(source, target));
         }

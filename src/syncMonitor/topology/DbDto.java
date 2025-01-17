@@ -4,24 +4,14 @@ import lombok.Getter;
 import syncMonitor.session.SyncMonitorSession;
 
 @Getter
-
 public class DbDto {
-    private SyncMonitorSession session;
-    private String query;
+    private final SyncMonitorSession session;
+    private final String query; // 만들어지면서 팩토리가 할당
 
-    public DbDto(SyncMonitorSession sourceSession, String sourceQuery) {
+    // 팩토리만 사용하기 위해 접근 디폴트로
+    DbDto(SyncMonitorSession sourceSession, String sourceQuery) {
         this.session = sourceSession;
         this.query = sourceQuery;
     }
 
-    public void setQuery(String query) {
-        if(!query.isEmpty()){
-            this.query = query;
-        }
-        else {
-            System.out.println("쿼리 생성 실패");
-        }
-
-        // 니증에 에러코드 추가
-    }
 }
