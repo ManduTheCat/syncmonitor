@@ -2,15 +2,14 @@ package syncMonitor.session;
 
 import lombok.Getter;
 import syncMonitor.config.wrapper.DbConfig.TopologyConfig;
+import syncMonitor.topology.SessionKeyPrefix;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 // 세션 관리 객체 Map 으로 객체
 // 단일성보장, 추후 멀티쓰래딩 고려해 synchronizedMap 사용
 public class SessionManager {
+
 
     @Getter
     private final Map<String, SyncMonitorSession> connetcionMap;
@@ -29,11 +28,11 @@ public class SessionManager {
     public void addTopologySession(TopologyConfig topologyConfig){
         StringBuilder sourceKeySb = new StringBuilder();
         StringBuilder targetKeySb = new StringBuilder();
-        String sourceKey = sourceKeySb.append("source")
+        String sourceKey = sourceKeySb.append(SessionKeyPrefix.source_)
                 .append(topologyConfig.getSource().getDbType())
                 .append("_")
                 .append(topologyConfig.getSource().getDbSid()).toString();
-        String targetKey = targetKeySb.append("target")
+        String targetKey = targetKeySb.append(SessionKeyPrefix.target_)
                 .append(topologyConfig.getTarget().getDbType())
                 .append("_")
                 .append(topologyConfig.getTarget().getDbSid()).toString();
@@ -58,26 +57,29 @@ public class SessionManager {
         } else if ("ORACLE".equalsIgnoreCase(targetDbType)) {
             targetSession = new SyncMonitorSessionOracle(topologyConfig.getSource());
         }
-        if(sourceSession != null){
-            this.connetcionMap.put(sourceKey, sourceSession);
+        if(sourceSession == null){
+            throw new NullPointerException();
         }
-        if(targetSession != null){
-            this.connetcionMap.put(targetKey, targetSession);
+        if(targetSession == null){
+            throw new NullPointerException();
         }
+        this.connetcionMap.put(sourceKey, sourceSession);
+        this.connetcionMap.put(targetKey, targetSession);
     }
 
+    //todo uuid 로 키 할당 고민
     public void addTopologySession(List<TopologyConfig> topologyConfigs){
         for(TopologyConfig topologyConfig :topologyConfigs){
             StringBuilder sourceKeySb = new StringBuilder();
             StringBuilder targetKeySb = new StringBuilder();
-            String sourceKey = sourceKeySb.append("source")
-                    .append(topologyConfig.getSource().getDbType())
+            String sourceKey = sourceKeySb.append(SessionKeyPrefix.source_)
+                    .append(topologyConfig.getSource().getDbType().toLowerCase())
                     .append("_")
-                    .append(topologyConfig.getSource().getDbSid()).toString();
-            String targetKey = targetKeySb.append("target")
-                    .append(topologyConfig.getTarget().getDbType())
+                    .append(topologyConfig.getSource().getDbSid().toLowerCase()).toString();
+            String targetKey = targetKeySb.append(SessionKeyPrefix.target_)
+                    .append(topologyConfig.getTarget().getDbType().toLowerCase())
                     .append("_")
-                    .append(topologyConfig.getTarget().getDbSid()).toString();
+                    .append(topologyConfig.getTarget().getDbSid().toLowerCase()).toString();
 
             String sourceDbType = topologyConfig.getSource().getDbType();
             String targetDbType = topologyConfig.getTarget().getDbType();

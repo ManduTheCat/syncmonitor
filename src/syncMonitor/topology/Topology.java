@@ -4,6 +4,7 @@ import lombok.Getter;
 import syncMonitor.config.wrapper.DbConfig.TopologyConfig;
 import syncMonitor.query.target.QueryPrsLct;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,58 +22,53 @@ public class Topology {
         this.source = source;
         this.target = target;
         this.lastCommitQuery = QueryPrsLct.getLastCommitTime(topologyConfig.getTarget());
-        System.out.println(lastCommitQuery);
     }
 
-    public String runSourceChangeNumberQuery(){
-        String response = "";
+    public Integer runSourceChangeNumberQuery(){
+        Integer response = -1;
 
         //세션을 해제 하지 않는지 확인 해야한다
-        try(PreparedStatement pstmt = this.source.getSession().getConn().prepareStatement(source.getQuery())){
-
+        try{
+            Connection conn = this.source.getSession().getConn();
+            PreparedStatement pstmt = conn.prepareStatement(source.getQuery());
             ResultSet rSet = pstmt.executeQuery();
             while (rSet.next()) {
-                response = rSet.getString(1);
+                response = rSet.getInt(1);
                 Thread.sleep(100);
             }
             return response;
-        }catch (SQLException e){
+        }catch (Exception e){
             e.printStackTrace();
-            return "getSQL Fail";
-        } catch (InterruptedException e) {
-
-            return "getSQL Fail";
+            return null;
         }
 
     }
 
-    public String runTargetChangeNumberQuery(){
-        String response = "";
+    public Integer runTargetChangeNumberQuery(){
 
+        Integer res = -1;
         //세션을 해제 하지 않는지 확인 해야한다
-        try(PreparedStatement pstmt = this.source.getSession().getConn().prepareStatement(target.getQuery())){
-
+        try{
+            System.out.println(this.target.getSession());
+            Connection conn = this.target.getSession().getConn();
+            PreparedStatement pstmt = conn.prepareStatement(target.getQuery());
             ResultSet rSet = pstmt.executeQuery();
             while (rSet.next()) {
-                response = rSet.getString(1);
+                res = rSet.getInt(1);
                 Thread.sleep(100);
             }
-            return response;
-        }catch (SQLException e){
+            return res;
+        } catch (Exception e) {
             e.printStackTrace();
-            return "getSQL Fail";
-        } catch (InterruptedException e) {
-
-            return "getSQL Fail";
+            return -1;
         }
 
     }
     public String runTargetTimeQuery(){
         String response = "";
-        System.out.println(lastCommitQuery);
         //세션을 해제 하지 않는지 확인 해야한다
-        try(PreparedStatement pstmt = this.target.getSession().getConn().prepareStatement(this.lastCommitQuery)){
-
+        try(Connection conn = this.target.getSession().getConn()){
+            PreparedStatement pstmt = conn.prepareStatement(this.lastCommitQuery);
             ResultSet rSet = pstmt.executeQuery();
             while (rSet.next()) {
                 response = rSet.getString(1);

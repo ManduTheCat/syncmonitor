@@ -1,5 +1,6 @@
 package syncMonitor.topology;
 
+
 import syncMonitor.config.wrapper.DbConfig.TopologyConfig;
 import syncMonitor.query.source.QueryTsnOrSCN;
 import syncMonitor.query.target.QueryPrsLct;
@@ -18,16 +19,17 @@ public class TopologyFactory {
     private static final String SOURCE_KEY = "source";
     private static final String TARGET_KEY = "target";
 
+    // 메나저로부터 세션 맵을 받고 토플로지 생성
     public List<Topology> genToplogy(List<TopologyConfig> topologyConfigs, Map<String,SyncMonitorSession> connectionMap){
-        List<Topology> generatedTopologyList = new ArrayList<>();;
+        List<Topology> generatedTopologyList = new ArrayList<>();
 
         for(TopologyConfig topologyConfig: topologyConfigs){
             Map<String, String> query = findQuery(topologyConfig);
 
             // 여기에 토플러지 자체를 넣어서 하기엔 미리 체크하는 부분 때문에 안됨
-            Map<String, SyncMonitorSession> session = findSession(topologyConfig, connectionMap);
-            DbDto source = new DbDto(session.get(SOURCE_KEY), query.get(SOURCE_KEY));
-            DbDto target = new DbDto(session.get(TARGET_KEY), query.get(TARGET_KEY));
+            Map<String, SyncMonitorSession> sessionMap = findSession(topologyConfig, connectionMap);
+            DbDto source = new DbDto(sessionMap.get(SOURCE_KEY), query.get(SOURCE_KEY));
+            DbDto target = new DbDto(sessionMap.get(TARGET_KEY), query.get(TARGET_KEY));
             generatedTopologyList.add(new Topology(source, target, topologyConfig));
         }
 
@@ -82,23 +84,34 @@ public class TopologyFactory {
         // 싱글톤이니 소스 타겟 별로 무조건 하나씩을 가지게 하자.. 재활용 하면 영향도가 어떻게 되지..
         SyncMonitorSession sourceSession = null;
         SyncMonitorSession targetSession = null;
+        StringBuilder sourceKeyBase = new StringBuilder().append(SessionKeyPrefix.source_);
+        StringBuilder targetKeyBase = new StringBuilder().append(SessionKeyPrefix.target_);
+
         if("ORACLE".equalsIgnoreCase(topologyConfig.getSource().getDbType())){
-            sourceSession= connectionMap.get("SOURCE_ORACLE_"+topologyConfig.getSource().getDbSid());
+            String sourceKey = sourceKeyBase.append(topologyConfig.getSource().getDbType().toLowerCase())
+                    .append(topologyConfig.getSource().getDbSid().toLowerCase()).toString();
+            sourceSession = connectionMap.get(sourceKey);
         } else if ("TIBERO".equalsIgnoreCase(topologyConfig.getSource().getDbType())) {
-            sourceSession= connectionMap.get("SOURCE_TIBERO_"+topologyConfig.getSource().getDbSid());
+            String sourceKey = sourceKeyBase.append(topologyConfig.getSource().getDbType().toLowerCase())
+                    .append(topologyConfig.getSource().getDbSid().toLowerCase()).toString();
+            sourceSession = connectionMap.get(sourceKey);
         }
         if("ORACLE".equalsIgnoreCase(topologyConfig.getTarget().getDbType())){
-            sourceSession= connectionMap.get("TARGET_ORACLE_"+topologyConfig.getSource().getDbSid());
+            String targetKey = targetKeyBase.append(topologyConfig.getTarget().getDbType().toLowerCase())
+                    .append(topologyConfig.getTarget().getDbSid().toLowerCase()).toString();
+            targetSession = connectionMap.get(targetKey);
         } else if ("TIBERO".equalsIgnoreCase(topologyConfig.getTarget().getDbType())) {
-            sourceSession= connectionMap.get("TARGET_TIBERO_"+topologyConfig.getSource().getDbSid());
+            String targetKey = targetKeyBase.append(topologyConfig.getTarget().getDbType().toLowerCase())
+                    .append(topologyConfig.getTarget().getDbSid().toLowerCase()).toString();
+            targetSession = connectionMap.get(targetKey);
         }
 
-        Map<String, SyncMonitorSession> res = new HashMap<>();
+        Map<String, SyncMonitorSession> sessionMap = new HashMap<>();
 
-        res.put(SOURCE_KEY, sourceSession);
-        res.put(TARGET_KEY, targetSession);
+        sessionMap.put(SOURCE_KEY, sourceSession);
+        sessionMap.put(TARGET_KEY, targetSession);
 
-        return res;
+        return sessionMap;
     }
 
 }

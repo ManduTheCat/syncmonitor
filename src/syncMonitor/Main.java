@@ -9,12 +9,14 @@ import syncMonitor.topology.Topology;
 import syncMonitor.topology.TopologyFactory;
 import syncMonitor.view.View;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         YmlConfigWrapper config = new YmlConfigWrapper();
         System.out.println(config);
         List<TopologyConfig> topologyConfigList = config.getConfigWrapper().getTopology();
@@ -29,7 +31,12 @@ public class Main {
 
         // 커낵션 매니저가 관리하는 객체 조회 테스트
         for(SyncMonitorSession syncMonitorSession :connetcionMap.values()){
-            System.out.println(syncMonitorSession.getConn());
+
+            System.out.println("session dual test");
+            ResultSet rs = syncMonitorSession.getConn().prepareStatement("select * from dual").executeQuery();
+            while(rs.next()){
+                System.out.println(rs.getString(1));
+            }
         }
         for(Topology topology: topologies){
             System.out.println();

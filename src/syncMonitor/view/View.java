@@ -30,7 +30,6 @@ public class View{
             asciiTitle.addRule();
             System.out.println(asciiTitle.render(80));
 
-            // 상태 테이블
             AsciiTable asciiTable = new AsciiTable();
             asciiTable.addRule();
             asciiTable.addRow("TOPOLOGY", "SYNC WAY", "SOURCE TSN", "TARGET TSN", "TSN_GAP");
@@ -39,15 +38,17 @@ public class View{
             asciiTableTime.addRule();
             asciiTableTime.addRow("curr time" , LocalDateTime.now().format(formatter));
             asciiTableTime.addRule();
-
+            System.out.println("count of toplolgy list : " + topologyList.size());
             for (Topology topology : topologyList) {
                 // DTO에서 객체 가져오기
-                String LastCommitTimeRes = topology.runTargetTimeQuery().split("\\.")[0];
+                //String LastCommitTimeRes = topology.runTargetTimeQuery().split("\\.")[0];
+                String LastCommitTimeRes = "test";
 
-                LocalDateTime targetCommitTime = LocalDateTime.parse(LastCommitTimeRes, formatter);
+                //LocalDateTime targetCommitTime = LocalDateTime.parse(LastCommitTimeRes, formatter);
+                LocalDateTime targetCommitTime = LocalDateTime.now();
                 // 데이터 조회
-                Integer sourceCn = Integer.parseInt(topology.runSourceChangeNumberQuery());
-                Integer targetCn = Integer.parseInt(topology.runTargetChangeNumberQuery());
+                Integer sourceCn = topology.runSourceChangeNumberQuery();
+                Integer targetCn = topology.runTargetChangeNumberQuery();
 
                 // 테이블 행 추가
                 asciiTable.addRow("Null", "T->O", sourceCn, targetCn, (sourceCn - targetCn));
