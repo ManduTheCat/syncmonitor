@@ -41,7 +41,7 @@ public class Main {
 //            System.out.println(topology.getSource().getQuery());
 //            System.out.println(topology.getTarget().getQuery());
 //        }
-        View view = new View(topologies);
+        View view = new View(topologies, monitorConfig);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("\u001B[H\u001B[2J"); // 화면 clear

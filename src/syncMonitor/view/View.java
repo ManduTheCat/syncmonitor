@@ -4,6 +4,7 @@ package syncMonitor.view;
 import de.vandermeer.asciitable.AsciiTable;
 import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 import lombok.Getter;
+import syncMonitor.config.wrapper.MonitorConfig;
 import syncMonitor.topology.Topology;
 
 import java.time.LocalDateTime;
@@ -14,10 +15,16 @@ public class View{
     @Getter
     private final List<Topology> topologyList;
 
-    private final static Integer SIZE = 50;
+    private static Integer SIZE;
 
-    public View(List<Topology> topologyList) {
+    public View(List<Topology> topologyList , MonitorConfig monitorConfig) {
         this.topologyList = topologyList;
+        SIZE = 55;
+        if(monitorConfig.getMode().chars().allMatch(Character::isDigit)){
+            SIZE = Integer.parseInt(monitorConfig.getMode());
+        }else if ("WIDE".equalsIgnoreCase(monitorConfig.getMode())) {
+            SIZE = 60;
+        }
     }
     public void genView() {
         try {
@@ -73,7 +80,7 @@ public class View{
 //                System.out.println("targetCn:" + targetCn);
                 // 테이블 행 추가
 
-                asciiTableTime.addRow(topology.getTopologyName()+" commited target" , targetCommitTime);
+                asciiTableTime.addRow(topology.getTopologyName()+" commit to target at" , targetCommitTime);
                 asciiTableTime.addRule();
             }
 
