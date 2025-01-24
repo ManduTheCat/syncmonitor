@@ -29,6 +29,15 @@ public class Topology {
         this.topologyName = topologyName;
         this.proSyncUser = proSyncUser;
     }
+    public void disconnectAll(){
+        try{
+            this.source.getSession().getConn().close();
+            this.target.getSession().getConn().close();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 
     public Integer runSourceChangeNumberQuery(){
         Integer response = -1;
@@ -40,14 +49,12 @@ public class Topology {
             ResultSet rSet = pstmt.executeQuery();
             while (rSet.next()) {
                 response = rSet.getInt(1);
-                Thread.sleep(100);
             }
+            Thread.sleep(100);
             return response;
         }catch (Exception e){
-            e.printStackTrace();
             return -1;
         }
-
     }
 
     public Integer runTargetChangeNumberQuery(){
@@ -60,11 +67,11 @@ public class Topology {
             ResultSet rSet = pstmt.executeQuery();
             while (rSet.next()) {
                 res = rSet.getInt(1);
-                Thread.sleep(100);
             }
+            Thread.sleep(100);
             return res;
+
         } catch (Exception e) {
-            e.printStackTrace();
             return -1;
         }
 
@@ -77,16 +84,13 @@ public class Topology {
             ResultSet rSet = pstmt.executeQuery();
             while (rSet.next()) {
                 response = rSet.getString(1);
-                Thread.sleep(100);
             }
+            Thread.sleep(100);
             return response;
         }catch (SQLException e){
-            e.printStackTrace();
             return "getCommitTime Fail";
         } catch (InterruptedException e) {
-            e.printStackTrace();
-            return "getSQL Fail";
+            throw new RuntimeException(e);
         }
-
     }
 }

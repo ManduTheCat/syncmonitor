@@ -77,10 +77,8 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-//            for (Topology topologyDto :) {
-//                //토플러지 객체에서 세션종료
-//
-//            }
+            System.out.println("closed");
+            topologies.stream().forEach(Topology::disconnectAll);
         }
     }
 

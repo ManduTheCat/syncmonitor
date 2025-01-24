@@ -37,5 +37,5 @@ fi
 echo "Using Java: $JAVA_BIN"
 
 # Run the Java application
-"$JAVA_BIN" -Dconfig.file=./config.yml -Dfile.encoding=UTF-8 -jar ProSyncMonitor-1.0.jar
+"$JAVA_BIN" -Dconfig.file=./config.yml -Dfile.encoding=UTF-8 -jar ./build/libs/ProSyncMonitor-1.0.jar
 
