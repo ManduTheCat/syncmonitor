@@ -10,7 +10,8 @@ $  sh run_monitor.sh
 
 
  ### 동작 화면
-![결과 화면](./doc/res_back.png)
+
+![결과 화면](./doc/res.png)
 
 ## 설정방법
 config.yml 수정하여 설정 변경가능
