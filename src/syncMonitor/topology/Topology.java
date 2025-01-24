@@ -46,6 +46,8 @@ public class Topology {
         }catch (Exception e){
             e.printStackTrace();
             return -1;
+        }finally {
+            source.getSession().disconnect();
         }
 
     }
@@ -62,10 +64,13 @@ public class Topology {
                 res = rSet.getInt(1);
                 Thread.sleep(100);
             }
+
             return res;
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
+        }finally {
+            target.getSession().disconnect();
         }
 
     }
@@ -86,7 +91,10 @@ public class Topology {
         } catch (InterruptedException e) {
             e.printStackTrace();
             return "getSQL Fail";
+        }finally {
+            target.getSession().disconnect();
         }
+
 
     }
 }
