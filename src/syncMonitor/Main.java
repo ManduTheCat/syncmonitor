@@ -26,27 +26,21 @@ public class Main {
         SessionManager sessionManager = SessionManager.getInstance();
         sessionManager.addTopologySession(topologyConfigList);
         // 맵으로 만들어 토플러지 팩토리에 전달후 전체 토플러지 리스트 생성
-        Map<String, SyncMonitorSession> connetcionMap = sessionManager.getConnetcionMap();
-        List<Topology> topologies = topologyFactory.genToplogy(topologyConfigList, connetcionMap);
-
+        Map<String, SyncMonitorSession> sessionMap = sessionManager.getConnetcionMap();
+        List<Topology> topologies = topologyFactory.genToplogy(topologyConfigList, sessionMap);
         // 커낵션 매니저가 관리하는 객체 조회 테스트
-        for(SyncMonitorSession syncMonitorSession :connetcionMap.values()){
-
-            System.out.println("session dual test");
+        for(SyncMonitorSession syncMonitorSession :sessionMap.values()){
+            System.out.println(syncMonitorSession.getBaseURL() + "session dual test");
             ResultSet rs = syncMonitorSession.getConn().prepareStatement("select * from dual").executeQuery();
             while(rs.next()){
-                System.out.println(rs.getString(1));
+                System.out.println(rs.getString(1).equals("X") ? "ok":"fail");
             }
         }
-        for(Topology topology: topologies){
-            System.out.println();
-            System.out.println(topology.getSource().getQuery());
-            System.out.println(topology.getTarget().getQuery());
-        }
-
-
-
-        /////////////////////
+//        for(Topology topology: topologies){
+//            System.out.println();
+//            System.out.println(topology.getSource().getQuery());
+//            System.out.println(topology.getTarget().getQuery());
+//        }
         View view = new View(topologies);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -57,30 +51,29 @@ public class Main {
         try {
             System.out.println("\u001B[H\u001B[2J"); // 화면 clear
             System.out.flush();
-            view.genView();
 
-//            while (true) {
-//                System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
-//                System.out.flush();
-//                System.out.println("press 'ctl + c' to exit...");
-//
-//                System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
-//                System.out.flush();
-//
-//                if (System.in.available() > 0) {
-//                    char userInput = (char) System.in.read();
-//                    if (userInput == 'x' || userInput == 'X') {
-//                        System.out.println("[INFO] Exiting program...");
-//
-//                        System.out.println("\u001B[H\u001B[2J");
-//                        System.out.flush();
-//                        return; // main 종료
-//                    }
-//                }
-//                // 짧은 대기 시간 추가 (0.5초)
-//                //todo 1초로 변경
-//                Thread.sleep(500);
-//            }
+            while (true) {
+                System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
+                System.out.flush();
+                System.out.println("press 'ctl + c' to exit...");
+                view.genView();
+                System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
+                System.out.flush();
+
+                if (System.in.available() > 0) {
+                    char userInput = (char) System.in.read();
+                    if (userInput == 'x' || userInput == 'X') {
+                        System.out.println("[INFO] Exiting program...");
+
+                        System.out.println("\u001B[H\u001B[2J");
+                        System.out.flush();
+                        return; // main 종료
+                    }
+                }
+                // 짧은 대기 시간 추가 (0.5초)
+                //todo 1초로 변경
+                Thread.sleep(1000);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

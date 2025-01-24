@@ -16,12 +16,18 @@ public class Topology {
     private final DbDto source;
     private final DbDto target;
     private final String lastCommitQuery;
+    private final String topologyName;
+    private final String proSyncUser;
+
 
     //팩토리에서만 생성할수 있다 접근 패키지로 관리
-    Topology(DbDto source, DbDto target, TopologyConfig topologyConfig) {
+    Topology(String topologyName, String proSyncUser ,
+             DbDto source, DbDto target, TopologyConfig topologyConfig) {
         this.source = source;
         this.target = target;
         this.lastCommitQuery = QueryPrsLct.getLastCommitTime(topologyConfig.getTarget());
+        this.topologyName = topologyName;
+        this.proSyncUser = proSyncUser;
     }
 
     public Integer runSourceChangeNumberQuery(){
@@ -39,7 +45,7 @@ public class Topology {
             return response;
         }catch (Exception e){
             e.printStackTrace();
-            return null;
+            return -1;
         }
 
     }
@@ -49,7 +55,6 @@ public class Topology {
         Integer res = -1;
         //세션을 해제 하지 않는지 확인 해야한다
         try{
-            System.out.println(this.target.getSession());
             Connection conn = this.target.getSession().getConn();
             PreparedStatement pstmt = conn.prepareStatement(target.getQuery());
             ResultSet rSet = pstmt.executeQuery();
@@ -66,7 +71,6 @@ public class Topology {
     }
     public String runTargetTimeQuery(){
         String response = "";
-        //세션을 해제 하지 않는지 확인 해야한다
         try(Connection conn = this.target.getSession().getConn()){
             PreparedStatement pstmt = conn.prepareStatement(this.lastCommitQuery);
             ResultSet rSet = pstmt.executeQuery();

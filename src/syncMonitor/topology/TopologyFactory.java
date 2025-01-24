@@ -16,21 +16,33 @@ import java.util.Map;
 public class TopologyFactory {
     // 여러개의 토플러지가 가능해야하니 리스트로 받는다.
 
-    private static final String SOURCE_KEY = "source";
-    private static final String TARGET_KEY = "target";
+    private static final String SOURCE_QUERY_KEY = "source";
+    private static final String TARGET_QUERY_KEY = "target";
+    private static final String LAS_COMMIT_KEY = "lastCommit";
 
-    // 메나저로부터 세션 맵을 받고 토플로지 생성
+    // 메니저로부터 세션 맵을 받고 토플로지 생성
     public List<Topology> genToplogy(List<TopologyConfig> topologyConfigs, Map<String,SyncMonitorSession> connectionMap){
         List<Topology> generatedTopologyList = new ArrayList<>();
 
         for(TopologyConfig topologyConfig: topologyConfigs){
             Map<String, String> query = findQuery(topologyConfig);
-
-            // 여기에 토플러지 자체를 넣어서 하기엔 미리 체크하는 부분 때문에 안됨
+            String topologyName = topologyConfig.getName();
+            String proSyncUser = topologyConfig.getSource().getProSyncUser();
+            StringBuilder sourceSessionKey = new StringBuilder().append(SessionKeyPrefix.source_);
+            sourceSessionKey.append(topologyConfig.getSource().getDbType().toLowerCase()).append("_");
+            sourceSessionKey.append(topologyConfig.getSource().getDbSid().toLowerCase());
+//            System.out.println("source key: "+sourceSessionKey);
+//            System.out.println(connectionMap.get(sourceSessionKey.toString()));
+            StringBuilder targetSessionKey = new StringBuilder().append(SessionKeyPrefix.target_);
+            targetSessionKey.append(topologyConfig.getTarget().getDbType().toLowerCase()).append("_");
+            targetSessionKey.append(topologyConfig.getTarget().getDbSid().toLowerCase());
+//            System.out.println("target key: "+targetSessionKey);
+//            System.out.println(connectionMap.get(targetSessionKey.toString()));
             Map<String, SyncMonitorSession> sessionMap = findSession(topologyConfig, connectionMap);
-            DbDto source = new DbDto(sessionMap.get(SOURCE_KEY), query.get(SOURCE_KEY));
-            DbDto target = new DbDto(sessionMap.get(TARGET_KEY), query.get(TARGET_KEY));
-            generatedTopologyList.add(new Topology(source, target, topologyConfig));
+//            System.out.println("setting sessionMap key : "+ sessionMap.keySet());
+            DbDto source = new DbDto(sessionMap.get(sourceSessionKey.toString()), query.get(SOURCE_QUERY_KEY));
+            DbDto target = new DbDto(sessionMap.get(targetSessionKey.toString()), query.get(TARGET_QUERY_KEY));
+            generatedTopologyList.add(new Topology(topologyName,proSyncUser, source, target, topologyConfig));
         }
 
         // 쿼리 판단해서 할당, 세션 검사해서 할당
@@ -58,6 +70,8 @@ public class TopologyFactory {
         }else if ("TIBERO".equalsIgnoreCase(topologyConfig.getTarget().getDbType())){
             targetQuery = QueryPrsLct.getTibero(topologyConfig.getTarget());
         }
+
+
         // time target 소스 또한 타겟의 마지막 커밋 타임 알고 있다.
         if("ORACLE".equalsIgnoreCase(topologyConfig.getTarget().getDbType())){
             lastCommitTimeQuery = QueryPrsLct.getLastCommitTime(topologyConfig.getTarget());
@@ -70,10 +84,13 @@ public class TopologyFactory {
 
         //todo 해당 부분 널일 경우 처리 need
         if(!sourceQuery.isEmpty()){
-            res.put(SOURCE_KEY, sourceQuery);
+            res.put(SOURCE_QUERY_KEY, sourceQuery);
         }
         if(!targetQuery.isEmpty()){
-            res.put(TARGET_KEY,targetQuery);
+            res.put(TARGET_QUERY_KEY,targetQuery);
+        }
+        if(!lastCommitTimeQuery.isEmpty()){
+            res.put(LAS_COMMIT_KEY,lastCommitTimeQuery);
         }
         return res;
 
@@ -86,30 +103,34 @@ public class TopologyFactory {
         SyncMonitorSession targetSession = null;
         StringBuilder sourceKeyBase = new StringBuilder().append(SessionKeyPrefix.source_);
         StringBuilder targetKeyBase = new StringBuilder().append(SessionKeyPrefix.target_);
+        String sourceKey = "";
+        String targetKey = "";
+
 
         if("ORACLE".equalsIgnoreCase(topologyConfig.getSource().getDbType())){
-            String sourceKey = sourceKeyBase.append(topologyConfig.getSource().getDbType().toLowerCase())
+            sourceKey = sourceKeyBase.append(topologyConfig.getSource().getDbType().toLowerCase()).append("_")
                     .append(topologyConfig.getSource().getDbSid().toLowerCase()).toString();
             sourceSession = connectionMap.get(sourceKey);
         } else if ("TIBERO".equalsIgnoreCase(topologyConfig.getSource().getDbType())) {
-            String sourceKey = sourceKeyBase.append(topologyConfig.getSource().getDbType().toLowerCase())
+            sourceKey = sourceKeyBase.append(topologyConfig.getSource().getDbType().toLowerCase()).append("_")
                     .append(topologyConfig.getSource().getDbSid().toLowerCase()).toString();
             sourceSession = connectionMap.get(sourceKey);
         }
         if("ORACLE".equalsIgnoreCase(topologyConfig.getTarget().getDbType())){
-            String targetKey = targetKeyBase.append(topologyConfig.getTarget().getDbType().toLowerCase())
+            targetKey = targetKeyBase.append(topologyConfig.getTarget().getDbType().toLowerCase()).append("_")
                     .append(topologyConfig.getTarget().getDbSid().toLowerCase()).toString();
             targetSession = connectionMap.get(targetKey);
         } else if ("TIBERO".equalsIgnoreCase(topologyConfig.getTarget().getDbType())) {
-            String targetKey = targetKeyBase.append(topologyConfig.getTarget().getDbType().toLowerCase())
+            targetKey = targetKeyBase.append(topologyConfig.getTarget().getDbType().toLowerCase()).append("_")
                     .append(topologyConfig.getTarget().getDbSid().toLowerCase()).toString();
             targetSession = connectionMap.get(targetKey);
         }
 
         Map<String, SyncMonitorSession> sessionMap = new HashMap<>();
 
-        sessionMap.put(SOURCE_KEY, sourceSession);
-        sessionMap.put(TARGET_KEY, targetSession);
+        // 키가 쿼릭키가 아닌 세션키가 들어가야함
+        sessionMap.put(sourceKey, sourceSession);
+        sessionMap.put(targetKey, targetSession);
 
         return sessionMap;
     }

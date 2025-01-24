@@ -32,17 +32,16 @@ public class View{
 
             AsciiTable asciiTable = new AsciiTable();
             asciiTable.addRule();
-            asciiTable.addRow("TOPOLOGY", "SYNC WAY", "SOURCE TSN", "TARGET TSN", "TSN_GAP");
+            asciiTable.addRow("TOPOLOGY", "PSYC ID", "SOURCE TSN", "TARGET TSN", "TSN_GAP");
             asciiTable.addRule();
             AsciiTable asciiTableTime= new AsciiTable();
             asciiTableTime.addRule();
             asciiTableTime.addRow("curr time" , LocalDateTime.now().format(formatter));
             asciiTableTime.addRule();
-            System.out.println("count of toplolgy list : " + topologyList.size());
             for (Topology topology : topologyList) {
                 // DTO에서 객체 가져오기
                 //String LastCommitTimeRes = topology.runTargetTimeQuery().split("\\.")[0];
-                String LastCommitTimeRes = "test";
+                //String LastCommitTimeRes = topology.runTargetTimeQuery();
 
                 //LocalDateTime targetCommitTime = LocalDateTime.parse(LastCommitTimeRes, formatter);
                 LocalDateTime targetCommitTime = LocalDateTime.now();
@@ -50,12 +49,14 @@ public class View{
                 Integer sourceCn = topology.runSourceChangeNumberQuery();
                 Integer targetCn = topology.runTargetChangeNumberQuery();
 
+//                System.out.println("sourceCn: " +sourceCn);
+//                System.out.println("targetCn:" + targetCn);
                 // 테이블 행 추가
-                asciiTable.addRow("Null", "T->O", sourceCn, targetCn, (sourceCn - targetCn));
-                asciiTable.addRule();
+                asciiTable.addRow(topology.getTopologyName() == null ? "null":topology.getTopologyName(),
+                        topology.getProSyncUser(), sourceCn, targetCn, (sourceCn - targetCn));
                 asciiTable.addRule();
 
-                asciiTableTime.addRow("last commit" , targetCommitTime);
+                asciiTableTime.addRow(topology.getTopologyName()+" commited target" , "teset");
                 asciiTableTime.addRule();
             }
 

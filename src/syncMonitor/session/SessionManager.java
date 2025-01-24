@@ -96,18 +96,23 @@ public class SessionManager {
 
             //target session 할당
             if("TIBERO".equalsIgnoreCase(targetDbType)){
-                targetSession = new SyncMonitorSessionTibero(topologyConfig.getSource());
+                targetSession = new SyncMonitorSessionTibero(topologyConfig.getTarget());
 
             } else if ("ORACLE".equalsIgnoreCase(targetDbType)) {
-                targetSession = new SyncMonitorSessionOracle(topologyConfig.getSource());
+                targetSession = new SyncMonitorSessionOracle(topologyConfig.getTarget());
             }
+
+
             if(sourceSession != null){
                 this.connetcionMap.put(sourceKey, sourceSession);
             }
             if(targetSession != null){
                 this.connetcionMap.put(targetKey, targetSession);
             }
+
         }
+
+
     }
 
 }
