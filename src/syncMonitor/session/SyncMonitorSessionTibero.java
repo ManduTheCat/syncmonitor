@@ -1,65 +1,32 @@
 package syncMonitor.session;
 
+import lombok.Getter;
 import syncMonitor.config.wrapper.DbConfig.DbConfig;
-import syncMonitor.config.wrapper.DbConfig.TiberoConfig;
 
-import java.sql.*;
-
-public class SyncMonitorSessionTibero extends SyncMonitorSession{
-
-    private static Connection conn = null;
-    private PreparedStatement pstmt = null;
-    private ResultSet rs = null;
-    // 나중에 클래스 역활 분리되면 넘겨줘야하다
+import java.sql.Connection;
 
 
 
-    /*
-    세션 변경 방지 및 단일세션 보장을 위한 싱글톤 패턴
-    * */
-    private static SyncMonitorSessionTibero syncMonitorSessionTibero = null;
-    private SyncMonitorSessionTibero(){
+//팩토리에서 이객체를 생성함으로서 새로운 세션을 만들수 있다
+public class SyncMonitorSessionTibero implements SyncMonitorSession {
+    private final Connection conn; // 해당 인스턴스의 conn 은 바뀌지 않음 보장
+
+    @Getter
+    private final String DbDRV = "com.tmax.tibero.jdbc.TbDriver";
+    @Getter
+    private final  String baseURL ="jdbc:tibero:thin:@";
+
+    public SyncMonitorSessionTibero(DbConfig tiberoConfig) {
+        this.conn = this.genSyncMonitorSessionConnection(tiberoConfig);
     }
 
-
-    public static SyncMonitorSessionTibero getSyncMonitorSession(DbConfig tiberoConfig){
-       // if (syncMonitorSessionTibero == null || conn == null) {
-            syncMonitorSessionTibero = new SyncMonitorSessionTibero();
-       // }
-        String DB_URL = "jdbc:tibero:thin:@" + tiberoConfig.getIp() + ":" + tiberoConfig.getPort() + ":" + tiberoConfig.getDbSid();
-        String DB_DRV = "com.tmax.tibero.jdbc.TbDriver";
-        try {
-            System.out.println("Loading Tibero Driver...");
-            Class.forName(DB_DRV);
-            System.out.println("Driver loaded successfully.");
-            System.out.println("Connecting to DB...");
-            conn = DriverManager.getConnection(DB_URL, tiberoConfig.getId(), tiberoConfig.getPwd());
-            System.out.println("Tibero Connect Success");
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (SQLException ex) {
-            System.out.println("Connection failed: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-        return syncMonitorSessionTibero;
-    }
-
+    @Override
     public void disconnect() {
         try {
-            if (rs != null) rs.close();
-            if (pstmt != null) pstmt.close();
             if (conn != null) conn.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-            if (rs != null) try {
-                rs.close();
-            } catch (Exception e) {
-            }
-            if (pstmt != null) try {
-                pstmt.close();
-            } catch (Exception ignored) {
-            }
             if (conn != null) try {
                 conn.close();
             } catch (Exception e) {
@@ -68,10 +35,12 @@ public class SyncMonitorSessionTibero extends SyncMonitorSession{
 
     }
 
+    @Override
     public Connection getConn() {
         if (conn == null) {
             System.out.println("Connection is null. Ensure the database is accessible.");
         }
         return conn;
     }
+
 }

@@ -1,62 +1,29 @@
 package syncMonitor.session;
 
+import lombok.Getter;
 import syncMonitor.config.wrapper.DbConfig.DbConfig;
-import syncMonitor.config.wrapper.DbConfig.OracleConfig;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
-public class SyncMonitorSessionOracle extends SyncMonitorSession {
-
-    private static Connection conn = null;
-    private PreparedStatement pstmt = null;
-    private ResultSet rs = null;
-    private static String DB_DRV = "oracle.jdbc.OracleDriver";
-    private static String baseURL = "jdbc:oracle:thin:@";
-
-    /*
-    세션 변경 방지 및 단일세션 보장을 위한 싱글톤 패턴
-    * */
-    private static SyncMonitorSessionOracle syncMonitorSessionOracle = null;
-    private SyncMonitorSessionOracle(){
+//팩토리에서 이객체를 생성함으로서 새로운 세션을 만들수 있다
+public class SyncMonitorSessionOracle implements SyncMonitorSession {
+    private final Connection conn;
+    @Getter
+    private final String baseURL = "jdbc:oracle:thin:@";
+    @Getter
+    private final String  dbDRV = "oracle.jdbc.OracleDriver";
+    public SyncMonitorSessionOracle(DbConfig oracleConfig){
+        this.conn = this.genSyncMonitorSessionConnection(oracleConfig);
     }
 
-    public static SyncMonitorSessionOracle getSyncMonitorSession(DbConfig oracleConfig){
-        if(syncMonitorSessionOracle != null) return syncMonitorSessionOracle;
-        syncMonitorSessionOracle = new SyncMonitorSessionOracle();
 
-        String DB_URL = baseURL + oracleConfig.getIp() + ":" + oracleConfig.getPort() + ":" + oracleConfig.getDbSid();
-        try {
-            Class.forName(DB_DRV);
-            System.out.println("Driver loaded successfully.");
-            System.out.println("Connecting to DB...");
-            conn = DriverManager.getConnection(DB_URL, oracleConfig.getId(), oracleConfig.getPwd());
-            System.out.println("Oracle Connect Success");
-        } catch (Exception ex) {
-            System.out.println("Connection failed: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-        return syncMonitorSessionOracle;
-    }
-
+    @Override
     public void disconnect() {
         try {
-            if (rs != null) rs.close();
-            if (pstmt != null) pstmt.close();
             if (conn != null) conn.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-            if (rs != null) try {
-                rs.close();
-            } catch (Exception e) {
-            }
-            if (pstmt != null) try {
-                pstmt.close();
-            } catch (Exception ignored) {
-            }
             if (conn != null) try {
                 conn.close();
             } catch (Exception e) {
@@ -65,11 +32,13 @@ public class SyncMonitorSessionOracle extends SyncMonitorSession {
 
     }
 
+    @Override
     public Connection getConn() {
         if(conn != null){
             return conn;
         }
-        System.out.println("conn is null");
+        System.out.println("Oracle Connection is null. Ensure the database is accessible");
         return null;
     }
+
 }

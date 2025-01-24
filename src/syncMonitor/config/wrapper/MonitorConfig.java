@@ -1,7 +1,9 @@
 package syncMonitor.config.wrapper;
 
+
 public class MonitorConfig {
-    private String mode;
+    public String mode;
+
     public String getMode() {
         return mode;
     }

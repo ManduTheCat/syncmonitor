@@ -21,8 +21,9 @@ dependencies {
     implementation files('tibero7-jdbc.jar')
     implementation files('ojdbc6.jar')
     implementation 'org.yaml:snakeyaml:2.0'
-
-}
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    }
 
 
 

@@ -5,14 +5,15 @@ import lombok.Setter;
 import lombok.ToString;
 
 
-
-public class TargetConfig implements DbConfig{
+public class SourceConfig implements DbConfig{
+    // Getters and Setters
     private String dbType;
     private String ip;
     private int port;
     private String connId;
     private String connPwd;
     private String proSyncUser;
+    private String getDbSid;
     private String dbSid;
 
     @Override
@@ -67,6 +68,14 @@ public class TargetConfig implements DbConfig{
 
     public void setProSyncUser(String proSyncUser) {
         this.proSyncUser = proSyncUser;
+    }
+
+    public String getGetDbSid() {
+        return getDbSid;
+    }
+
+    public void setGetDbSid(String getDbSid) {
+        this.getDbSid = getDbSid;
     }
 
     @Override
