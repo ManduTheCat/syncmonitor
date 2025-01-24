@@ -80,6 +80,9 @@ public class View{
 
                 asciiTableTime.addRow(topology.getTopologyName()+" commit to target at" , targetCommitTime);
                 asciiTableTime.addRule();
+
+                //topology.getTarget().getSession().disconnect();
+                //topology.getSource().getSession().disconnect();
             }
 
             // 테이블 출력
@@ -90,6 +93,8 @@ public class View{
 
             asciiTableTime.setTextAlignment(TextAlignment.CENTER);
             System.out.println(asciiTableTime.render(SIZE));
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
