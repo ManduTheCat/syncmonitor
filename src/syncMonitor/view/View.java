@@ -23,7 +23,7 @@ public class View{
         if(monitorConfig.getMode().chars().allMatch(Character::isDigit)){
             SIZE = Integer.parseInt(monitorConfig.getMode());
         }else if ("WIDE".equalsIgnoreCase(monitorConfig.getMode())) {
-            SIZE = 60;
+            SIZE = 70;
         }
     }
     public void genView() {
@@ -37,7 +37,7 @@ public class View{
             asciiTitle.addRule();
             asciiTitle.addRow("Prosync Monitor - Tibero & Oracle Sync Status").setTextAlignment(TextAlignment.CENTER);
             asciiTitle.addRule();
-            System.out.println(asciiTitle.render(SIZE));
+            //System.out.println(asciiTitle.render(SIZE));
 
             AsciiTable asciiTable = new AsciiTable();
             asciiTable.addRule();
@@ -55,14 +55,12 @@ public class View{
                 //LocalDateTime targetCommitTime = LocalDateTime.parse(LastCommitTimeRes, formatter);
                 String targetCommitTime = null;
                 try{
-
                     targetCommitTime = topology.runTargetTimeQuery();
                 }catch (Exception e){
-                    targetCommitTime = null;
+                    targetCommitTime = "null";
                 }
                 // 데이터 조회
                 try{
-
                     Integer sourceCn = topology.runSourceChangeNumberQuery();
                     Integer targetCn = topology.runTargetChangeNumberQuery();
                     asciiTable.addRow(topology.getTopologyName() == null ? "null" : topology.getTopologyName(),
