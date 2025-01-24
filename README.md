@@ -6,96 +6,114 @@ oracle 과 tibero 데이터 베이스 세션을 통해 prs_lct, scn, tsn 비교 
 ```
 $  sh run_monitor.sh 
 ```
-### 출력 내용
-- TOPOLOGY: 프로싱크 연결된 `DB_SID` 이름 결함 (프로싱크 토플로지 이름이 아닙니다. 출력내용 추후 적절한 이름으로 수정예정)
-- SYNC WAY: 프로싱크 동기화 방향 ex) A->B : A 변경사항 을 B 에 적용
-- SOURCE TSN : 변경사항 발생한 DB 의 TSN(SCN) 값
-  - 티베로 에 보네는 쿼리 : `select current_tsn as tsn from v$database`
-  - 오라클 에 보네는 쿼리 : `select current_scn as tsn from v$database`
-- TARGET TSN : 변경사항 반영될 target DB 의 마지막 동기화 된 TSN(SCN) 값
-  - 티베로 에 보네는 쿼리: `select to_number(tsn) as tsn from [티베로 user: prs_lct 테이블 소유 스키마].prs_lct`
-  - 오라클 에 보네는 쿼리: `select to_number(tsn) as tsn from [오라클 user: prs_lct 테이블 소유 스키마].prs_lct `
-- TSN_GAP : SOURCE TSN , TARGET TSN 간 차이, 값 클수록 SOURCE, TARGET 간 동기화 느림 의미
-- curr time : 현제 시간
-- oracle last commit : oracel 마지막 동기화 시간
-  - 티베로 에 보네는 쿼리: `select time from [티베로 user: prs_lct 테이블 소유 스키마].prs_lct`
-- tibero last commit : tibero 마지막 동기화 시간
-  - 티베로 에 보네는 쿼리:`select time from  [오라클 user: prs_lct 테이블 소유 스키마].prs_lct`
+
 
 
  ### 동작 화면
-![결과 화면](./doc/res.png)
+![결과 화면](./doc/res_back.png)
 
 ## 설정방법
 config.yml 수정하여 설정 변경가능
 ```
 monitor:
-  mode: 모니터 크기 wide, narraw 중입력 
+  mode: 77 (모니터 크기 지정 wide, 정수 임력가능)
 topology:
-  - name: sync1
-    mode: normal
-    target1:
-      db: tibero, oracle 중 입력
-      ip: 아이피
-      port: 리스너포트
-      id: jdbc 접속 계정
-      pwd: 접속 암호
-      user: prs_lct 테이블 소유한 스키마
-      dbSid: db sid
-    target2:
-      db: oracle
+  - name: ttt (첫번째 토플러지 이름 지정, 문자열 입력가능)
+    source: (토플로지 `source` 의 설정 시작 부분) 
+      dbType: tibero ( 접속할 디비 종류 tibero, oracle 입력가능 )
+      ip: 192.168.1.187 (접속 ip)
+      port: 4628 (접속 포트)
+      connId: tibero (접속 db계정)
+      connPwd: tmax (접속 db 계정 암호)
+      proSyncUser: jsh_ott ( 프로싱크 유저명 source target 동일 )
+      dbSid: tibero7_2 ( 접속 db sid)
+    target: (토플로지 `target` 의 설정 시작 부분) 
+      dbType: tibero ( 접속할 디비 종류 tibero, oracle 입력가능 )
+      ip: 192.168.1.187 (접속 ip)
+      port: 4628 (접속 포트)
+      connId: sys (접속 db계정)
+      connPwd: tibero (접속 db 계정 암호)
+      proSyncUser: jsh_ott ( 프로싱크 유저명 source target 동일 )
+      dbSid: tibero7_2 ( 접속 db sid)
+  - name: tto (두번째 토플러지 이름 지정, 문자열 입력가능)
+    source:
+      dbType: tibero
+      ip: 192.168.1.187
+      port: 4628
+      connId: tibero
+      connPwd: tmax
+      proSyncUser: jsh_tto
+      dbSid: tibero7_2
+    target:
+      dbType: oracle
       ip: 192.168.1.188
       port: 1525
-      id: JSH_OTT
-      pwd: jsh
-      user: jsh_tto
+      connId: JSH_tto
+      connPwd: jsh
+      proSyncUser: jsh_tto
       dbSid: oraclesb
+    ...
+ 
 
 ```
-여러 토플로지 등록 예시
+TtoT OtoT TtoO 토플로지 등록 예시
 ```
 monitor:
   mode: wide
 topology:
-  - name: sync1
-    mode: normal
-    target1:
-      db: tibero
+  - name: ttt
+    source:
+      dbType: tibero
       ip: 192.168.1.187
       port: 4628
-      id: tibero
-      pwd: tmax
-      user: jsh_ott
+      connId: tibero
+      connPwd: tmax
+      proSyncUser: jsh_ott
       dbSid: tibero7_2
-    target2:
-      db: oracle
-      ip: 192.168.1.188
-      port: 1525
-      id: JSH_OTT
-      pwd: jsh
-      user: jsh_tto
-      dbSid: oraclesb
-  - name: sync2
-    mode: normal
-    target1:
-      db: tibero
+    target:
+      dbType: tibero
       ip: 192.168.1.187
       port: 4628
-      id: tibero
-      pwd: tmax
-      user: jsh_ott
+      connId: sys
+      connPwd: tibero
+      proSyncUser: jsh_ott
       dbSid: tibero7_2
-    target2:
-      db: oracle
+  - name: tto
+    source:
+      dbType: tibero
+      ip: 192.168.1.187
+      port: 4628
+      connId: tibero
+      connPwd: tmax
+      proSyncUser: jsh_tto
+      dbSid: tibero7_2
+    target:
+      dbType: oracle
       ip: 192.168.1.188
       port: 1525
-      id: JSH_OTT
-      pwd: jsh
-      user: jsh_tto
+      connId: JSH_tto
+      connPwd: jsh
+      proSyncUser: jsh_tto
       dbSid: oraclesb
-
+  - name: ott
+    source:
+      dbType: oracle
+      ip: 192.168.1.188
+      port: 1525
+      connId: JSH_ott
+      connPwd: jsh
+      proSyncUser: JSH_OTT
+      dbSid: oraclesb
+    target:
+      dbType: tibero
+      ip: 192.168.1.187
+      port: 4628
+      connId: tibero
+      connPwd: tmax
+      proSyncUser: jsh_ott
+      dbSid: tibero7_2
 ```
 ## 기능 
 * oracle 과 tibero 데이터 베이스 세션을 통해 prs_lct, scn, tsn 비교
-* oracle tibero topology 설정 추가해 수행시 동적 화면 변화
-* (tibero to tibero 는 개발중인상태)
+* mode 변수 통해 출력 크기 지정 가능
+* 
