@@ -40,16 +40,12 @@ public class Topology {
             ResultSet rSet = pstmt.executeQuery();
             while (rSet.next()) {
                 response = rSet.getInt(1);
-                Thread.sleep(100);
             }
+            conn.close();
             return response;
         }catch (Exception e){
-            e.printStackTrace();
             return -1;
-        }finally {
-            source.getSession().disconnect();
         }
-
     }
 
     public Integer runTargetChangeNumberQuery(){
@@ -62,15 +58,11 @@ public class Topology {
             ResultSet rSet = pstmt.executeQuery();
             while (rSet.next()) {
                 res = rSet.getInt(1);
-                Thread.sleep(100);
             }
-
+            conn.close();
             return res;
         } catch (Exception e) {
-            e.printStackTrace();
             return -1;
-        }finally {
-            target.getSession().disconnect();
         }
 
     }
@@ -82,18 +74,13 @@ public class Topology {
             ResultSet rSet = pstmt.executeQuery();
             while (rSet.next()) {
                 response = rSet.getString(1);
-                Thread.sleep(100);
             }
+            conn.close();
             return response;
         }catch (SQLException e){
-            e.printStackTrace();
             return "getCommitTime Fail";
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return "getSQL Fail";
-        }finally {
-            target.getSession().disconnect();
         }
+
 
 
     }
