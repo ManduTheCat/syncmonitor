@@ -14,6 +14,8 @@ public class View{
     @Getter
     private final List<Topology> topologyList;
 
+    private final static Integer SIZE = 50;
+
     public View(List<Topology> topologyList) {
         this.topologyList = topologyList;
     }
@@ -28,7 +30,7 @@ public class View{
             asciiTitle.addRule();
             asciiTitle.addRow("Prosync Monitor - Tibero & Oracle Sync Status").setTextAlignment(TextAlignment.CENTER);
             asciiTitle.addRule();
-            System.out.println(asciiTitle.render(80));
+            System.out.println(asciiTitle.render(SIZE));
 
             AsciiTable asciiTable = new AsciiTable();
             asciiTable.addRule();
@@ -44,19 +46,34 @@ public class View{
                 //String LastCommitTimeRes = topology.runTargetTimeQuery();
 
                 //LocalDateTime targetCommitTime = LocalDateTime.parse(LastCommitTimeRes, formatter);
-                LocalDateTime targetCommitTime = LocalDateTime.now();
+                String targetCommitTime = null;
+                try{
+
+                    targetCommitTime = topology.runTargetTimeQuery();
+                }catch (Exception e){
+                    targetCommitTime = null;
+                }
                 // 데이터 조회
-                Integer sourceCn = topology.runSourceChangeNumberQuery();
-                Integer targetCn = topology.runTargetChangeNumberQuery();
+                try{
+
+                    Integer sourceCn = topology.runSourceChangeNumberQuery();
+                    Integer targetCn = topology.runTargetChangeNumberQuery();
+                    asciiTable.addRow(topology.getTopologyName() == null ? "null" : topology.getTopologyName(),
+                            topology.getProSyncUser(), sourceCn, targetCn, (sourceCn - targetCn));
+                    asciiTable.addRule();
+                }catch (Exception e){
+                    Integer sourceCn = -1;
+                    Integer targetCn = -1;
+                    asciiTable.addRow(topology.getTopologyName() == null ? "null":topology.getTopologyName(),
+                            topology.getProSyncUser(), sourceCn, targetCn, "Fail get res");
+                    asciiTable.addRule();
+                }
 
 //                System.out.println("sourceCn: " +sourceCn);
 //                System.out.println("targetCn:" + targetCn);
                 // 테이블 행 추가
-                asciiTable.addRow(topology.getTopologyName() == null ? "null":topology.getTopologyName(),
-                        topology.getProSyncUser(), sourceCn, targetCn, (sourceCn - targetCn));
-                asciiTable.addRule();
 
-                asciiTableTime.addRow(topology.getTopologyName()+" commited target" , "teset");
+                asciiTableTime.addRow(topology.getTopologyName()+" commited target" , targetCommitTime);
                 asciiTableTime.addRule();
             }
 
@@ -64,10 +81,10 @@ public class View{
 
 
             asciiTable.setTextAlignment(TextAlignment.CENTER);
-            System.out.println(asciiTable.render(80));
+            System.out.println(asciiTable.render(SIZE));
 
             asciiTableTime.setTextAlignment(TextAlignment.CENTER);
-            System.out.println(asciiTableTime.render(80));
+            System.out.println(asciiTableTime.render(SIZE));
         } catch (Exception e) {
             e.printStackTrace();
         }

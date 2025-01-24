@@ -71,7 +71,8 @@ public class Topology {
     }
     public String runTargetTimeQuery(){
         String response = "";
-        try(Connection conn = this.target.getSession().getConn()){
+        try{
+            Connection conn = this.target.getSession().getConn();
             PreparedStatement pstmt = conn.prepareStatement(this.lastCommitQuery);
             ResultSet rSet = pstmt.executeQuery();
             while (rSet.next()) {

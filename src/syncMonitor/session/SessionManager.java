@@ -67,7 +67,7 @@ public class SessionManager {
         this.connetcionMap.put(targetKey, targetSession);
     }
 
-    //todo uuid 로 키 할당 고민
+    //todo uuid 로 키 할당 고려 필요
     public void addTopologySession(List<TopologyConfig> topologyConfigs){
         for(TopologyConfig topologyConfig :topologyConfigs){
             StringBuilder sourceKeySb = new StringBuilder();
@@ -101,7 +101,6 @@ public class SessionManager {
             } else if ("ORACLE".equalsIgnoreCase(targetDbType)) {
                 targetSession = new SyncMonitorSessionOracle(topologyConfig.getTarget());
             }
-
 
             if(sourceSession != null){
                 this.connetcionMap.put(sourceKey, sourceSession);
