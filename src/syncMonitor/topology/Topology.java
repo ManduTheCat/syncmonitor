@@ -51,6 +51,7 @@ public class Topology {
                 response = rSet.getInt(1);
             }
             Thread.sleep(100);
+            pstmt.close();
             return response;
         }catch (Exception e){
             return -1;
@@ -69,6 +70,7 @@ public class Topology {
                 res = rSet.getInt(1);
             }
             Thread.sleep(100);
+            pstmt.close();
             return res;
 
         } catch (Exception e) {
@@ -86,6 +88,7 @@ public class Topology {
                 response = rSet.getString(1);
             }
             Thread.sleep(100);
+            pstmt.close();
             return response;
         }catch (SQLException e){
             return "getCommitTime Fail";
@@ -94,3 +97,4 @@ public class Topology {
         }
     }
 }
+

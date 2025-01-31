@@ -13,7 +13,7 @@ public class QueryPrsLct {
         return "select TSN from " + config.getProSyncUser() + ".prs_lct";
     }
     public static String getLastCommitTime(DbConfig config){
-        return "select time from " + config.getProSyncUser() + ".prs_lct";
+        return "select TO_CHAR(time, 'YYYY-MM-DD HH24:MI:SS') from " + config.getProSyncUser() + ".prs_lct";
     }
 
 }
