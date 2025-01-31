@@ -56,6 +56,7 @@ public class View{
                 String targetCommitTime = null;
                 try{
                     targetCommitTime = topology.runTargetTimeQuery();
+                    //System.out.println(LocalDateTime.parse(targetCommitTime, formatter));
                 }catch (Exception e){
                     targetCommitTime = "null";
                 }
@@ -93,6 +94,7 @@ public class View{
 
             asciiTableTime.setTextAlignment(TextAlignment.CENTER);
             System.out.println(asciiTableTime.render(SIZE));
+
 
 
         } catch (Exception e) {
