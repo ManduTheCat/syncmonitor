@@ -91,10 +91,10 @@ public class Topology {
             pstmt.close();
             return response;
         }catch (SQLException e){
-            e.printStackTrace();
             return "getCommitTime Fail";
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 }
+
