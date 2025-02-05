@@ -45,7 +45,7 @@ public class Main {
                 System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
                 System.out.flush();
                 System.out.println("press 'ctl + c' to exit...");
-                view.genView(); // 데이터 조회이벤트(run 으로 시작하는 메소드) 발생, 출력 테이블 생성
+                view.genView(); // 데이터 조회이벤트(run 으로 시작하는 메소드) 발생, 출력, 조회 실패시 출력 처리, 테이블 생성
                 System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
                 System.out.flush();
 

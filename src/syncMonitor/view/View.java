@@ -15,11 +15,10 @@ public class View{
     @Getter
     private final List<Topology> topologyList;
 
-    private static Integer SIZE;
+    private static Integer SIZE = 55;
 
     public View(List<Topology> topologyList , MonitorConfig monitorConfig) {
         this.topologyList = topologyList;
-        SIZE = 55;
         if(monitorConfig.getMode().chars().allMatch(Character::isDigit)){
             SIZE = Integer.parseInt(monitorConfig.getMode());
         }else if ("WIDE".equalsIgnoreCase(monitorConfig.getMode())) {
@@ -68,11 +67,10 @@ public class View{
                             topology.getProSyncUser(), sourceCn, targetCn, (sourceCn - targetCn));
                     asciiTable.addRule();
                 }catch (Exception e){
-                    Integer sourceCn = -1;
-                    Integer targetCn = -1;
+                    String sourceCn = topology.getTopologyName()+" src fail";
+                    String targetCn = topology.getTopologyName()+" target fail";
                     asciiTable.addRow(topology.getTopologyName() == null ? "null":topology.getTopologyName(),
                             topology.getProSyncUser(), sourceCn, targetCn, "Fail get res");
-                    //todo 토플로지 이름 해당 source target 매시지 출력
                     asciiTable.addRule();
                 }
 
