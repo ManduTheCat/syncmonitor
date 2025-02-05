@@ -24,11 +24,11 @@ public class Main {
         TopologyFactory topologyFactory = new TopologyFactory();
         // 메니저로 커넥션 수행 및 map 으로 관리
         SessionManager sessionManager = SessionManager.getInstance();
-        // 맵으로 만들어 토플러지 팩토리에 전달후 전체 토플러지 리스트 생성
+        // sessionMap 으로 만들어 토플러지 팩토리에 전달후 전체 토플러지 모음 생성
+        // sessionMap 은 일종의 커낵션 풀
+        // 토플러지는 커넥션 풀에서 커낵션을 꺼내 쓰는 개념
         Map<String, SyncMonitorSession> sessionMap = sessionManager.getConnetcionMap(topologyConfigList);
         List<Topology> topologies = topologyFactory.genToplogy(topologyConfigList, sessionMap);
-        // 커낵션 매니저가 관리하는 객체 조회 테스트
-
 
         View view = new View(topologies, monitorConfig);
 
@@ -45,7 +45,7 @@ public class Main {
                 System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
                 System.out.flush();
                 System.out.println("press 'ctl + c' to exit...");
-                view.genView();
+                view.genView(); // 데이터 조회이벤트(run 으로 시작하는 메소드) 발생, 출력 테이블 생성
                 System.out.print("\u001B[H"); // 커서를 화면 맨 위로 이동
                 System.out.flush();
 
@@ -59,8 +59,6 @@ public class Main {
                         return; // main 종료
                     }
                 }
-                // 짧은 대기 시간 추가 (0.5초)
-                //todo 1초로 변경
                 Thread.sleep(1000);
             }
         } catch (Exception e) {
