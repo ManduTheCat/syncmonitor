@@ -24,23 +24,12 @@ public class Main {
         TopologyFactory topologyFactory = new TopologyFactory();
         // 메니저로 커넥션 수행 및 map 으로 관리
         SessionManager sessionManager = SessionManager.getInstance();
-        sessionManager.addTopologySession(topologyConfigList);
         // 맵으로 만들어 토플러지 팩토리에 전달후 전체 토플러지 리스트 생성
-        Map<String, SyncMonitorSession> sessionMap = sessionManager.getConnetcionMap();
+        Map<String, SyncMonitorSession> sessionMap = sessionManager.getConnetcionMap(topologyConfigList);
         List<Topology> topologies = topologyFactory.genToplogy(topologyConfigList, sessionMap);
         // 커낵션 매니저가 관리하는 객체 조회 테스트
-        for(SyncMonitorSession syncMonitorSession :sessionMap.values()){
-            System.out.println(syncMonitorSession.getBaseURL() + "session dual test");
-            ResultSet rs = syncMonitorSession.getConn().prepareStatement("select * from dual").executeQuery();
-            while(rs.next()){
-                System.out.println(rs.getString(1).equals("X") ? "ok":"fail");
-            }
-        }
-//        for(Topology topology: topologies){
-//            System.out.println();
-//            System.out.println(topology.getSource().getQuery());
-//            System.out.println(topology.getTarget().getQuery());
-//        }
+
+
         View view = new View(topologies, monitorConfig);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {

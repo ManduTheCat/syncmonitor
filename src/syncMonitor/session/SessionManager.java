@@ -10,8 +10,6 @@ import java.util.*;
 // 단일성보장, 추후 멀티쓰래딩 고려해 synchronizedMap 사용
 public class SessionManager {
 
-
-    @Getter
     private final Map<String, SyncMonitorSession> connetcionMap;
 
     // static final getter
@@ -22,10 +20,24 @@ public class SessionManager {
         this.connetcionMap = Collections.synchronizedMap(new HashMap<>());
     }
 
+    public Map<String, SyncMonitorSession> getConnetcionMap(List<TopologyConfig> topologyConfigList ){
+        if(connetcionMap.isEmpty()){
+            addTopologySession(topologyConfigList);
+        }
+        return connetcionMap;
+    }
+
+
+    public Map<String, SyncMonitorSession> getConnetcionMap(TopologyConfig topologyConfigList ){
+        if(connetcionMap.isEmpty()){
+            addTopologySession(topologyConfigList);
+        }
+        return connetcionMap;
+    }
 
     // key 규칙 source/target_dbtype_sid
     //
-    public void addTopologySession(TopologyConfig topologyConfig){
+    private void addTopologySession(TopologyConfig topologyConfig){
         StringBuilder sourceKeySb = new StringBuilder();
         StringBuilder targetKeySb = new StringBuilder();
         String sourceKey = sourceKeySb.append(SessionKeyPrefix.source_)
@@ -67,8 +79,8 @@ public class SessionManager {
         this.connetcionMap.put(targetKey, targetSession);
     }
 
-    //todo uuid 로 키 할당 고려 필요
-    public void addTopologySession(List<TopologyConfig> topologyConfigs){
+
+    private void addTopologySession(List<TopologyConfig> topologyConfigs){
         for(TopologyConfig topologyConfig :topologyConfigs){
             StringBuilder sourceKeySb = new StringBuilder();
             StringBuilder targetKeySb = new StringBuilder();

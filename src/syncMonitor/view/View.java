@@ -72,6 +72,7 @@ public class View{
                     Integer targetCn = -1;
                     asciiTable.addRow(topology.getTopologyName() == null ? "null":topology.getTopologyName(),
                             topology.getProSyncUser(), sourceCn, targetCn, "Fail get res");
+                    //todo 토플로지 이름 해당 source target 매시지 출력
                     asciiTable.addRule();
                 }
 
