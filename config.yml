@@ -1,5 +1,5 @@
 monitor:
-  mode: wide
+  mode: 11
 topology:
   - name: ttt
     source:
