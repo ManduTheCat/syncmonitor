@@ -30,19 +30,14 @@ public class View{
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-            AsciiTable asciiTableTime= new AsciiTable();
-            asciiTableTime.addRule();
-            asciiTableTime.addRow("Prosync Monitor" , LocalDateTime.now().format(formatter));
-            asciiTableTime.addRule();
             // 제목 출력
-            AsciiTable asciiTitle = new AsciiTable();
-            asciiTitle.addRule();
-            asciiTitle.addRow("Prosync Monitor Sync Status").setTextAlignment(TextAlignment.CENTER);
-            asciiTitle.addRule();
             AsciiTable asciiTable = new AsciiTable();
             asciiTable.addRule();
-            asciiTable.addRow("TOPOLOGY", "PSYC ID", "SOURCE TSN", "TARGET TSN", "TSN GAP",
+            asciiTable.addRow(null,null, null, null,"Prosync Monitor" ,
                     "Last Commit Time" );
+            asciiTable.addRule();
+            asciiTable.addRow("TOPOLOGY", "PSYC ID", "SOURCE TSN", "TARGET TSN", "TSN GAP",
+                    LocalDateTime.now().format(formatter) );
             asciiTable.addRule();
 
 
