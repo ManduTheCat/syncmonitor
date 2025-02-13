@@ -50,18 +50,18 @@ public class View{
                 }
                 // 데이터 조회
                 try{
-                    Integer sourceCn = topology.runSourceChangeNumberQuery();
-                    Integer targetCn = topology.runTargetChangeNumberQuery();
+                    String sourceCn = topology.runSourceChangeNumberQuery();
+                    String targetCn = topology.runTargetChangeNumberQuery();
                     String sourceRes = String.valueOf(sourceCn);
                     String targetRes = String.valueOf(targetCn);
-                    String diffRes = String.valueOf(sourceCn - targetCn);
-                    if(sourceCn== -1){
+                    String diffRes = String.valueOf(Long.parseLong(sourceCn) - Long.parseLong(targetCn));
+                    if(sourceCn== null || sourceCn.length() == 0){
                         sourceRes = "source fail";
                     }
-                    if(targetCn== -1){
+                    if(targetCn == null || targetCn.length() == 0){
                         targetRes = "target fail";
                     }
-                    if(sourceCn == -1 || targetCn == -1){
+                    if(targetCn == null || sourceCn== null){
                         diffRes = "fail";
                     }
                     asciiTable.addRow(topology.getTopologyName() == null ? "null" : topology.getTopologyName(),
