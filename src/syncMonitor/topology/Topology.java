@@ -39,8 +39,8 @@ public class Topology {
         }
     }
 
-    public Integer runSourceChangeNumberQuery(){
-        Integer response = -1;
+    public String runSourceChangeNumberQuery(){
+        String response = null;
 
         //세션을 해제 하지 않는지 확인 해야한다
         try{
@@ -48,34 +48,35 @@ public class Topology {
             PreparedStatement pstmt = conn.prepareStatement(source.getQuery());
             ResultSet rSet = pstmt.executeQuery();
             while (rSet.next()) {
-                response = rSet.getInt(1);
+                response = rSet.getString(1);
             }
             Thread.sleep(100);
             pstmt.close();
             return response;
         }catch (Exception e){
-            // todo - 일떄 처리해야한다!!
-            return -1;
+            e.printStackTrace();
+            return null;
         }
     }
 
-    public Integer runTargetChangeNumberQuery(){
+    public String runTargetChangeNumberQuery(){
 
-        Integer res = -1;
+        String res = null;
         //세션을 해제 하지 않는지 확인 해야한다
         try{
             Connection conn = this.target.getSession().getConn();
             PreparedStatement pstmt = conn.prepareStatement(target.getQuery());
             ResultSet rSet = pstmt.executeQuery();
             while (rSet.next()) {
-                res = rSet.getInt(1);
+                res = rSet.getString(1);
             }
             Thread.sleep(100);
             pstmt.close();
             return res;
 
         } catch (Exception e) {
-            return -1;
+//            e.printStackTrace();
+            return null;
         }
 
     }

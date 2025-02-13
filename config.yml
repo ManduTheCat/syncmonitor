@@ -18,37 +18,3 @@ topology:
       connPwd: tibero
       proSyncUser: jsh_ott
       dbSid: tibero7_2
-  - name: tto
-    source:
-      dbType: tibero
-      ip: 192.168.1.187
-      port: 4628
-      connId: tibero
-      connPwd: tmax
-      proSyncUser: jsh_tto
-      dbSid: tibero7_2
-    target:
-      dbType: oracle
-      ip: 192.168.1.188
-      port: 1525
-      connId: JSH_tto
-      connPwd: jsh
-      proSyncUser: jsh_tto
-      dbSid: oraclesb
-  - name: ott
-    source:
-      dbType: oracle
-      ip: 192.168.1.188
-      port: 1525
-      connId: JSH_ott
-      connPwd: jsh
-      proSyncUser: JSH_OTT
-      dbSid: oraclesb
-    target:
-      dbType: tibero
-      ip: 192.168.1.187
-      port: 4628
-      connId: tibero
-      connPwd: tmax
-      proSyncUser: jsh_ott
-      dbSid: tibero7_2

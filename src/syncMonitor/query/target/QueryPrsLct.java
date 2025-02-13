@@ -6,7 +6,6 @@ import syncMonitor.config.wrapper.DbConfig.DbConfig;
 public class QueryPrsLct {
 
     public static String getOracle(DbConfig config){
-        // 오라클 정보가 온다
         return "select TSN from " + config.getProSyncUser() + ".prs_lct";
     }
     public static String getTibero(DbConfig config){
