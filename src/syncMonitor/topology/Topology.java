@@ -1,6 +1,7 @@
 package syncMonitor.topology;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import syncMonitor.config.wrapper.DbConfig.TopologyConfig;
 import syncMonitor.query.target.QueryPrsLct;
 
@@ -11,6 +12,7 @@ import java.sql.SQLException;
 
 // 설정 할때(최초생성) 빼고는 변경되서는 안되는 정보들
 
+@Slf4j
 @Getter
 public class Topology {
     private final DbDto source;
@@ -35,7 +37,7 @@ public class Topology {
             this.target.getSession().getConn().close();
 
         }catch (SQLException e){
-            e.printStackTrace();
+            log.error(e.fillInStackTrace().toString());
         }
     }
 
@@ -54,7 +56,7 @@ public class Topology {
             pstmt.close();
             return response;
         }catch (Exception e){
-            e.printStackTrace();
+            log.error(e.fillInStackTrace().toString());
             return null;
         }
     }
@@ -75,7 +77,7 @@ public class Topology {
             return res;
 
         } catch (Exception e) {
-//            e.printStackTrace();
+           log.error(e.fillInStackTrace().toString());
             return null;
         }
 
@@ -93,6 +95,7 @@ public class Topology {
             pstmt.close();
             return response;
         }catch (SQLException e){
+            log.error(e.fillInStackTrace().toString());
             return "getCommitTime Fail";
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

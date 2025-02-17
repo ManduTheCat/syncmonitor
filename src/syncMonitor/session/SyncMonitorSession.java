@@ -1,5 +1,6 @@
 package syncMonitor.session;
 
+
 import syncMonitor.config.wrapper.DbConfig.DbConfig;
 
 import java.sql.Connection;
@@ -7,7 +8,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
 public interface SyncMonitorSession {
+    org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SyncMonitorSession.class);
     String getDbDRV();
     String getBaseURL();
 
@@ -19,25 +22,28 @@ public interface SyncMonitorSession {
         String baseURL = getBaseURL();
         String DB_URL =  baseURL+ config.getIp() + ":" + config.getPort() + ":" + config.getDbSid();
         try {
-            System.out.println("Loading Driver...");
+            log.info("Loading Driver...");
             Class.forName(DB_DRV);
-            System.out.println("Driver loaded successfully." + ": "+DB_URL);
-            System.out.println("Connecting to DB...");
+            log.info("Driver loaded successfully." + ": "+DB_URL);
+            log.info("Connecting to DB...");
             conn = DriverManager.getConnection(DB_URL, config.getConnId(), config.getConnPwd());
-            System.out.println("Connect Success");
-            System.out.println("Start test...");
+            log.info("Connect Success");
+            log.info("Start test...");
+
             // dual 조회 테스트
             ResultSet rs = conn.prepareStatement("select * from dual").executeQuery();
             while(rs.next()){
-                System.out.println( rs.getString(1).equals("X") ? "success!!":"fail");
+                log.info( rs.getString(1).equals("X") ? "success!!":"fail");
+
             }
             rs.close();
 
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (SQLException ex) {
-            System.out.println("Connection failed: " + ex.getMessage());
-            ex.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            log.error(e.fillInStackTrace().toString());
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            log.error(e.fillInStackTrace().toString());
+            throw new RuntimeException(e);
         }
         return conn;
     }

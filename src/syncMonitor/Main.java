@@ -1,5 +1,6 @@
 package syncMonitor;
 
+import lombok.extern.slf4j.Slf4j;
 import syncMonitor.config.YmlConfigWrapper;
 import syncMonitor.config.wrapper.DbConfig.TopologyConfig;
 import syncMonitor.config.wrapper.MonitorConfig;
@@ -14,9 +15,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class Main {
-
     public static void main(String[] args) throws SQLException {
+        log.info("This is info log");
         YmlConfigWrapper config = new YmlConfigWrapper();
         System.out.println(config);
         List<TopologyConfig> topologyConfigList = config.getConfigWrapper().getTopology();
