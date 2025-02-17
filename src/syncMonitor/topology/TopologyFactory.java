@@ -82,6 +82,7 @@ public class TopologyFactory {
 
         Map<String, String> res = new HashMap<>();
 
+        //todo 해당 부분 널일 경우 처리 need
         if(!sourceQuery.isEmpty()){
             res.put(SOURCE_QUERY_KEY, sourceQuery);
         }
@@ -97,6 +98,7 @@ public class TopologyFactory {
 
     // 커넥션 맵 의 키는 source/target_dbtype_sid
     private Map<String, SyncMonitorSession> findSession(TopologyConfig topologyConfig, Map<String, SyncMonitorSession> connectionMap){
+        // 싱글톤이니 소스 타겟 별로 무조건 하나씩을 가지게 하자.. 재활용 하면 영향도가 어떻게 되지..
         SyncMonitorSession sourceSession = null;
         SyncMonitorSession targetSession = null;
         StringBuilder sourceKeyBase = new StringBuilder().append(SessionKeyPrefix.source_);
