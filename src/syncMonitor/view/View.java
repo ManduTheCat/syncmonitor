@@ -5,6 +5,7 @@ import de.vandermeer.asciitable.AsciiTable;
 import de.vandermeer.asciitable.CWC_LongestLine;
 import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import syncMonitor.config.wrapper.MonitorConfig;
 import syncMonitor.topology.Topology;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@Slf4j
 public class View{
     @Getter
     private final List<Topology> topologyList;
@@ -22,9 +24,12 @@ public class View{
         this.topologyList = topologyList;
         if(monitorConfig.getMode().chars().allMatch(Character::isDigit)){
             SIZE = Integer.parseInt(monitorConfig.getMode());
+            log.info("use external SIZE config");
         }else if ("WIDE".equalsIgnoreCase(monitorConfig.getMode())) {
             SIZE = 90;
+            log.info("use default size");
         }
+        log.info("SIZE is : " + SIZE);
     }
     public void genView() {
         try {
@@ -39,7 +44,6 @@ public class View{
             asciiTable.addRow("TOPOLOGY", "PSYC ID", "SOURCE TSN", "TARGET TSN", "TSN GAP",
                     LocalDateTime.now().format(formatter) );
             asciiTable.addRule();
-
 
             for (Topology topology : topologyList) {
                 String targetCommitTime = "null";
@@ -74,10 +78,6 @@ public class View{
                             topology.getProSyncUser(), sourceCn, targetCn, "Fail get res");
                     asciiTable.addRule();
                 }
-
-//                asciiTableTime.addRow(topology.getTopologyName()+" commit to target at" , targetCommitTime);
-//                asciiTableTime.addRule();
-
             }
 
             // 테이블 출력
@@ -85,11 +85,7 @@ public class View{
             asciiTable.setTextAlignment(TextAlignment.CENTER);
             cwc.add(SIZE, 0).add(SIZE,0).add(SIZE,0).add(SIZE,0).add(SIZE,0);
             asciiTable.getRenderer().setCWC(cwc);
-//            asciiTable.getContext().setWidth(SIZE);
             System.out.println(asciiTable.render());
-
-//            asciiTableTime.setTextAlignment(TextAlignment.CENTER);
-//            System.out.println(asciiTableTime.render(SIZE));
 
         } catch (Exception e) {
             e.printStackTrace();

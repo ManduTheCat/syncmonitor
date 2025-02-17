@@ -1,11 +1,13 @@
 package syncMonitor.session;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import syncMonitor.config.wrapper.DbConfig.DbConfig;
 
 import java.sql.Connection;
 
 //팩토리에서 이객체를 생성함으로서 새로운 세션을 만들수 있다
+@Slf4j
 public class SyncMonitorSessionOracle implements SyncMonitorSession {
     private final Connection conn;
     @Getter
@@ -22,11 +24,12 @@ public class SyncMonitorSessionOracle implements SyncMonitorSession {
         try {
             if (conn != null) conn.close();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error(ex.getMessage());
         } finally {
             if (conn != null) try {
                 conn.close();
             } catch (Exception e) {
+                log.error(e.getMessage());
             }
         }
 
@@ -37,7 +40,8 @@ public class SyncMonitorSessionOracle implements SyncMonitorSession {
         if(conn != null){
             return conn;
         }
-        System.out.println("Oracle Connection is null. Ensure the database is accessible");
+       log.error("Oracle Connection is null. Ensure the database is accessible");
+        log.error(new NullPointerException().getMessage());
         return null;
     }
 

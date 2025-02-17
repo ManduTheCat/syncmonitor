@@ -31,15 +31,13 @@ public class TopologyFactory {
             StringBuilder sourceSessionKey = new StringBuilder().append(SessionKeyPrefix.source_);
             sourceSessionKey.append(topologyConfig.getSource().getDbType().toLowerCase()).append("_");
             sourceSessionKey.append(topologyConfig.getSource().getDbSid().toLowerCase());
-//            System.out.println("source key: "+sourceSessionKey);
-//            System.out.println(connectionMap.get(sourceSessionKey.toString()));
+
             StringBuilder targetSessionKey = new StringBuilder().append(SessionKeyPrefix.target_);
             targetSessionKey.append(topologyConfig.getTarget().getDbType().toLowerCase()).append("_");
             targetSessionKey.append(topologyConfig.getTarget().getDbSid().toLowerCase());
-//            System.out.println("target key: "+targetSessionKey);
-//            System.out.println(connectionMap.get(targetSessionKey.toString()));
+
             Map<String, SyncMonitorSession> sessionMap = findSession(topologyConfig, connectionMap);
-//            System.out.println("setting sessionMap key : "+ sessionMap.keySet());
+
             DbDto source = new DbDto(sessionMap.get(sourceSessionKey.toString()), query.get(SOURCE_QUERY_KEY));
             DbDto target = new DbDto(sessionMap.get(targetSessionKey.toString()), query.get(TARGET_QUERY_KEY));
             generatedTopologyList.add(new Topology(topologyName,proSyncUser, source, target, topologyConfig));
