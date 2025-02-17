@@ -37,7 +37,7 @@ public class Topology {
             this.target.getSession().getConn().close();
 
         }catch (SQLException e){
-            log.error(e.getMessage());
+            log.error(e.fillInStackTrace().toString());
         }
     }
 
@@ -95,6 +95,7 @@ public class Topology {
             pstmt.close();
             return response;
         }catch (SQLException e){
+            log.error(e.fillInStackTrace().toString());
             return "getCommitTime Fail";
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

@@ -26,10 +26,10 @@ public class View{
             SIZE = Integer.parseInt(monitorConfig.getMode());
             log.info("use external SIZE config");
         }else if ("WIDE".equalsIgnoreCase(monitorConfig.getMode())) {
-            SIZE = 90;
-            log.info("use default size");
+            SIZE = 15;
+            log.info("Setting WIDE is checked use WIDE size :" + SIZE);
         }
-        log.info("SIZE is : " + SIZE);
+        log.info("column width SIZE is : " + SIZE);
     }
     public void genView() {
         try {
@@ -50,6 +50,8 @@ public class View{
                 try{
                     targetCommitTime = topology.runTargetTimeQuery();
                 }catch (Exception e){
+                    log.error("fail get query result");
+                    log.error(e.fillInStackTrace().toString());
                     targetCommitTime = "null";
                 }
                 // 데이터 조회
@@ -60,13 +62,18 @@ public class View{
                     String targetRes = String.valueOf(targetCn);
                     String diffRes = String.valueOf(Long.parseLong(sourceCn) - Long.parseLong(targetCn));
                     if(sourceCn== null || sourceCn.length() == 0){
+                        log.error("source TSN or SCN is empty ");
                         sourceRes = "source fail";
                     }
                     if(targetCn == null || targetCn.length() == 0){
+                        log.error("target TSN or SCN is empty ");
                         targetRes = "target fail";
                     }
                     if(targetCn == null || sourceCn== null){
                         diffRes = "fail";
+                    }
+                    if(topology.getTopologyName()== null){
+                        log.error("topology name is null check config");
                     }
                     asciiTable.addRow(topology.getTopologyName() == null ? "null" : topology.getTopologyName(),
                             topology.getProSyncUser(), sourceRes, targetRes, diffRes, targetCommitTime);
@@ -88,7 +95,7 @@ public class View{
             System.out.println(asciiTable.render());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.fillInStackTrace().toString());
         }
     }
 
