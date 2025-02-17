@@ -18,16 +18,16 @@ import java.util.Map;
 @Slf4j
 public class Main {
     public static void main(String[] args) throws SQLException {
-        log.info("This is info log");
+        log.info("init monitor..");
         YmlConfigWrapper config = new YmlConfigWrapper();
-        System.out.println(config);
         List<TopologyConfig> topologyConfigList = config.getConfigWrapper().getTopology();
         MonitorConfig monitorConfig = config.getConfigWrapper().getMonitor();
+        log.info("loading Config");
         TopologyFactory topologyFactory = new TopologyFactory();
         // 메니저로 커넥션 수행 및 map 으로 관리
         SessionManager sessionManager = SessionManager.getInstance();
         // sessionMap 으로 만들어 토플러지 팩토리에 전달후 전체 토플러지 모음 생성
-        // sessionMap 은 일종의 커낵션 풀
+        // sessionMap 은 커넥션 모음 맵
         // 토플러지는 커넥션 풀에서 커낵션을 꺼내 쓰는 개념
         Map<String, SyncMonitorSession> sessionMap = sessionManager.getConnetcionMap(topologyConfigList);
         List<Topology> topologies = topologyFactory.genToplogy(topologyConfigList, sessionMap);
