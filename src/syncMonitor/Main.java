@@ -1,5 +1,7 @@
 package syncMonitor;
 
+
+import com.github.lalyos.jfiglet.FigletFont;
 import lombok.extern.slf4j.Slf4j;
 import syncMonitor.config.YmlConfigWrapper;
 import syncMonitor.config.wrapper.DbConfig.TopologyConfig;
@@ -10,17 +12,22 @@ import syncMonitor.topology.Topology;
 import syncMonitor.topology.TopologyFactory;
 import syncMonitor.view.View;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 @Slf4j
 public class Main {
-    public static void main(String[] args) throws SQLException {
-        log.info("This is info log");
+    public static void main(String[] args) {
+        log.info("start monitor");
+        try{
+
+            String asciiArt1 = FigletFont.convertOneLine("ProSyncMonitor");
+            System.out.println(asciiArt1);
+        }catch (IOException e){
+            log.error(e.fillInStackTrace().toString());
+        }
         YmlConfigWrapper config = new YmlConfigWrapper();
-        System.out.println(config);
         List<TopologyConfig> topologyConfigList = config.getConfigWrapper().getTopology();
         MonitorConfig monitorConfig = config.getConfigWrapper().getMonitor();
         TopologyFactory topologyFactory = new TopologyFactory();
@@ -66,7 +73,7 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            System.out.println("closed");
+            log.info("stop monitor");
             topologies.stream().forEach(Topology::disconnectAll);
         }
     }
